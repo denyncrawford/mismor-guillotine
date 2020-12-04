@@ -41,12 +41,12 @@ export default {
     init() {
       const router = this.$router;
       let { sign } = this;
-      Object.keys(sign).forEach(k => {
+      for (let k in sign) {
         if (!sign[k]) {
           this.$refs[k].style.borderColor = 'red';
           return this.notify({title:"Campo vacio",message: "Por favor rellenar el campo "+k});
         }
-      })
+      }
       if (sign.psw !== sign.rpsw) return this.notify({title:"La contraseña no coincide", message: "Por favor verificar"})
       router.push('/init/configure')
     },
