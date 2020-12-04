@@ -29,4 +29,6 @@ const createWin = () => {
   win.loadURL(URL);
 }
 
+app.allowRendererProcessReuse = false;
+
 app.whenReady().then(() => createWin())

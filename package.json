@@ -73,6 +73,7 @@
     "electron": "latest",
     "electron-builder": "^22.8.0",
     "electron-connect": "^0.6.3",
+    "electron-rebuild": "^2.3.4",
     "minimist": "^1.2.5",
     "ora": "^5.0.0",
     "rollup-plugin-esbuild": "^2.4.2",
