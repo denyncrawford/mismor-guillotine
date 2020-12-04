@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+.router-link-exact-active {
+  @apply bg-white;
+}
+
+.router-link-exact-active * {
+  @apply text-indigo-800;
+}
+
+.parent:hover * {
+  @apply text-indigo-800
+}
+
+@tailwind utilities;
