@@ -2,16 +2,16 @@
   <div class="bg-indigo min-h-screen">
     <page 
       title="Crear super usuario"
-      description="Rellena los datos necesarios"
+      description="Rellena los datos necesarios para configurar"
     >
       <div class="flex flex-col w-100 max-w-md">
-        <transition :name="sign.name.length <= 1 ? 'slide' : ''">
+        <transition :name="sign.name.length <= 1 ? 'slide2' : ''">
           <h2 v-show="sign.name" class="ml-5 mb-2 font-bold text-blue-400">Nombre de usuario</h2>
         </transition>
         <div class="grid">
           <input v-model="sign.name" ref="name" type="text" placeholder="Nombre de usuario" class="mb-5 text-white py-2 px-5 bg-transparent rounded border outline-none border-1 border-blue-400">
         </div>
-        <transition :name="sign.psw.length <= 1 ? 'slide' : ''">
+        <transition :name="sign.psw.length <= 1 ? 'slide2' : ''">
           <h2 v-show="sign.psw || sign.rpsw" class="ml-5 mb-2 font-bold text-blue-400">Contraseña</h2>
         </transition>
         <div v- class="grid grid-cols-2 gap-5">
@@ -71,12 +71,12 @@ export default {
 </script>
 
 <style scoped>
-.slide-enter-active {
+.slide2-enter-active {
    animation: fadeInUp;
    animation-duration: .2s;
   }
 
-  .slide-leave-active {
+  .slide2-leave-active {
     animation: fadeOutDown;
     animation-duration: .2s;
   }
