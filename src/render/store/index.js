@@ -6,15 +6,15 @@ const store = createStore({
   state() {
     return {
       config: {},
-      user: {}
+      firstLoad: {},
     }
   },
   mutations: {
     setConfig(state, payload) {
       state.config = payload;
     },
-    setUser(state, payload) {
-      state.user = payload;
+    updateFirtsLoad(state, payload) {
+      state.firstLoad = payload;
     }
   }
 })

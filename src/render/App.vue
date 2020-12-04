@@ -1,5 +1,9 @@
 <template>
-  <router-view></router-view>
+  <router-view v-slot="{ Component }">
+      <transition :name="transitionName">
+        <component :is="Component" />
+      </transition>
+  </router-view>
 </template>
 <script>
 import { useRouter } from 'vue-router';
@@ -7,12 +11,22 @@ import { useStore } from 'vuex';
 import { persistentSotrage as state } from './store';
 export default {
   name: 'app',
+  data() {
+    return {
+      transitionName: ""
+    }
+  },
   setup() {
     const router = useRouter()
     router.push('/loading');
     router.beforeEach((to, from) => {
-      document.title = to.meta.title + ' - Guillotine' || 'Guillotine'
+      document.title = to.meta.title + ' - Guillotine' || 'Guillotine';
     })
+  },
+  watch: {
+    '$route' (to, from) {
+      this.transitionName = to.name == 'loading' ? '' : 'slide';
+    }
   },
   async mounted() {
     const router = this.$router;
@@ -35,3 +49,16 @@ export default {
   }
 }
 </script>
+
+<style>
+  .slide-enter-active {
+   animation: fadeInRight;
+   animation-delay: .2s;
+   animation-duration: .2s;
+  }
+
+  .slide-leave-active {
+    animation: fadeOutLeft;
+    animation-duration: .2s;
+  }
+</style>

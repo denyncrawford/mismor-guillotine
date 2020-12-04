@@ -5,6 +5,10 @@
   padding: 0;
 }
 
+#app {
+  background-color: #0e111f;
+}
+
 html {
   scrollbar-face-color: #646464;
   scrollbar-base-color: #353535;
