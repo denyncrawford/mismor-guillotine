@@ -11,7 +11,8 @@
     "dev:ele": "node script/build --env=development --watch",
     "build:vue": "vite build",
     "build:ele": "node script/build --env=production",
-    "build": "npm run build:vue && npm run build:ele && electron-builder"
+    "build": "npm run build:vue && npm run build:ele && electron-builder",
+    "rebuild": "node_modules/.bin/electron-rebuild.cmd"
   },
   "build": {
     "appId": "xxx@gmail.com",
