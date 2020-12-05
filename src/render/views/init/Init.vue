@@ -4,7 +4,7 @@
       title="Crear super usuario"
       description="Rellena los datos necesarios para configurar"
     >
-      <div class="flex flex-col w-100 max-w-md">
+      <div class="w-100 max-w-md">
         <transition :name="sign.name.length <= 1 ? 'slide2' : ''">
           <h2 v-show="sign.name" class="ml-5 mb-2 font-bold text-blue-400">Nombre de usuario</h2>
         </transition>
@@ -14,7 +14,7 @@
         <transition :name="sign.psw.length <= 1 ? 'slide2' : ''">
           <h2 v-show="sign.psw || sign.rpsw" class="ml-5 mb-2 font-bold text-blue-400">Contraseña</h2>
         </transition>
-        <div v- class="grid grid-cols-2 gap-5">
+        <div class="grid grid-cols-2 gap-5">
           <input v-model="sign.psw" ref="psw" type="password" placeholder="Contraseña" class="mb-5 text-white py-2 px-5 bg-transparent rounded border outline-none border-1 border-blue-400">
           <input v-model="sign.rpsw" ref="rpsw" type="password" placeholder="Repetir contraseña" class="mb-5 text-white py-2 px-5 bg-transparent rounded border outline-none border-1 border-blue-400">
         </div>
@@ -43,6 +43,15 @@ export default {
   components: {
     Page
   },
+  mounted() {
+    const state = this.$store.state
+    if (state.firstLoad.savedSession) {
+      let saved = state.firstLoad.savedSession
+      this.sign.name = saved.username
+      this.sign.psw = saved.password,
+      this.sign.email = saved.email
+    }
+  },
   methods: {
     init() {
       const router = this.$router;
@@ -56,7 +65,6 @@ export default {
       if (sign.psw !== sign.rpsw) return this.notify({title:"La contraseña no coincide", message: "Por favor verificar"})
       let { psw: password, name: username, email } = sign;
       this.$store.commit("updateFirtsLoad", { savedSession: {password, username, email} })
-      console.log(this.$store.state)
       router.push('/configure')
     },
     notify({title, message}) {

@@ -42,6 +42,14 @@ const router = createRouter({
       meta: {
         title: 'Configurar Aplicación'
       }
+    },
+    {
+      path: "/mode",
+      name: 'mode',
+      component: () => import('./views/Mode.vue'),
+      meta: {
+        title: 'Seleccionar modo'
+      }
     }
   ]
 })
