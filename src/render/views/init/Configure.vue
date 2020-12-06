@@ -32,13 +32,14 @@
 <script>
 import Page from '../../components/structure/Page.vue'
 import Loader from '../../components/Loader.vue'
-import { persistentSotrage as state } from '../../store/index.js'
+import { persistentSotrage as state, connect } from '../../store/index.js'
 const { getDevices } = require('usb-barcode-scanner');
 export default {
   data() {
     return {
       selectedDevice : "",
       database: "",
+      defaultDatabase: "guillotine",
       isLoading: false
     }
   },
@@ -57,8 +58,11 @@ export default {
       this.$router.go(-1)
     },
     async save() {
+      const db = await connect(this.database || this.defaultDatabase);
+      const users = db.collection("users")
       this.isLoading = true;
       let inMemory = this.$store.state.firstLoad;
+      inMemory.savedSession.admin = true;
       let { selectedDevice, database } = this;
       const config = {
         selectedDevice, 
@@ -68,8 +72,8 @@ export default {
       this.$store.commit('setConfig', config);
       await state.set({config});
       this.$store.commit('updateFirtsLoad', {});
+      await users.insertOne(inMemory.savedSession)
       setTimeout(() => {
-        this.isLoading = false;
         this.$router.push('/mode')
       }, Math.floor(Math.random() * (10000 - 3000 + 1) + 3000));
     }
