@@ -5,7 +5,7 @@ const router = createRouter({
   routes: [
     {
         path: '/',
-        name: 'index',
+        name: 'scan',
         component: () => import('./views/Index.vue'),
         meta: {
             title: 'Home'
@@ -50,7 +50,15 @@ const router = createRouter({
       meta: {
         title: 'Seleccionar modo'
       }
-    }
+    },
+    {
+        path: '/auth/:go',
+        name: 'auth',
+        component: () => import('./views/Auth.vue'),
+        meta: {
+            title: 'Autenticar usuario'
+        }
+    },
   ]
 })
 
