@@ -42,11 +42,7 @@ export default {
       title,
       message
     }) {
-      this.$notify.error({
-        title,
-        message,
-        position: 'bottom-right'
-      });
+      this.$message.error({message, showClose: true,});
     },
   },
   components: {

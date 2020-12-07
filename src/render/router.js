@@ -59,6 +59,30 @@ const router = createRouter({
             title: 'Autenticar usuario'
         }
     },
+    {
+      path: "/logOut",
+      name: 'logout',
+      component: () => import('./views/LogOut.vue'),
+      meta: {
+        title: 'Cerrar sesión'
+      }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('./views/Login.vue'),
+      meta: {
+          title: 'Ingresar al sistema'
+      }
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('./views/admin/Admin.vue'),
+      meta: {
+          title: 'Panel de control'
+      }
+    },
   ]
 })
 

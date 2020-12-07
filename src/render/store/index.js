@@ -27,6 +27,12 @@ const store = createStore({
     },
     updateFirtsLoad(state, payload) {
       state.firstLoad = payload;
+    },
+    logOut(state) {
+      delete state.config.savedSession
+    },
+    logIn(state, payload) {
+      state.config.savedSession = payload;
     }
   }
 })

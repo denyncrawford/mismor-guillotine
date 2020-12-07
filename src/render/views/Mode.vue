@@ -13,7 +13,7 @@
       </router-link>
     </div>
     <div class="grid w-10/12">
-     <el-button class="mt-10 bg-back text-red hover:bg-back hover:border-main-color hover:text-main-color">Salir</el-button>
+      <el-button @click="logOut" class="mt-10 bg-back text-red hover:bg-back hover:border-main-color hover:text-main-color">Salir</el-button>
     </div>
   </page>
 </template>
@@ -27,6 +27,11 @@ export default {
   },
   mounted() {
     replace();
+  },
+  methods: {
+    logOut() {
+      this.$router.push('/logOut')
+    }
   }
 }
 </script>

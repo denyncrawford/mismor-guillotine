@@ -16,6 +16,7 @@ module.exports = {
     textColor: ['responsive', 'hover', 'focus', 'group-hover'],
     width: ['responsive', 'hover', 'focus', 'group-hover'],
     padding: ['responsive', 'hover', 'focus'],
+    borderWidth: ['last'],
   },
   plugins: [],
 }

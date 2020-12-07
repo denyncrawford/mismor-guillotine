@@ -58,12 +58,13 @@ export default {
       this.$router.go(-1)
     },
     async save() {
-      const db = await connect(this.database || this.defaultDatabase);
+      let { selectedDevice, database } = this;
+      database = database || this.defaultDatabase; 
+      const db = await connect(database);
       const users = db.collection("users")
       this.isLoading = true;
       let inMemory = this.$store.state.firstLoad;
       inMemory.savedSession.admin = true;
-      let { selectedDevice, database } = this;
       const config = {
         selectedDevice, 
         database, 
