@@ -83,6 +83,14 @@ const router = createRouter({
           title: 'Panel de control'
       }
     },
+    {
+      path: '/newUser',
+      name: 'newUser',
+      component: () => import('./views/admin/CreateUser.vue'),
+      meta: {
+          title: 'Crear nuevo colaborador'
+      }
+    },
   ]
 })
 

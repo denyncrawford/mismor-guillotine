@@ -3,7 +3,8 @@
     <div class="mb-5">
       <h1 class="text-lg text-white mb-5">Acciones rapidas</h1>
       <div class="flex">
-        <el-button 
+        <el-button
+        @click="newUser"
         round 
         size="mini" 
         class="bg-back inline text-red hover:bg-main-color group flex items-center justify-center hover:border-main-color hover:text-back">
@@ -29,26 +30,26 @@
     <div>
       <h1 class="text-lg text-white mb-5">Colaboradores</h1>
       <div class="container">
-        <div class="rounded-lg border border-2 border-gray-400">
-          <div class="items-center border-b-2 border-gray-400 flex px-5 py-2">
+        <div class="rounded-lg border overflow-hidden border-gray-400">
+          <div class="items-center border-b border-gray-400 flex px-5 py-2">
             <h1 class="text-md text-white">Base de datos</h1>
-            <input type="text" placeholder="Buscar usuario" class="ml-auto ml-5 text-white py-1 px-5 bg-transparent rounded-full border outline-none border-1 border-gray-400">
+            <input type="text" placeholder="Buscar usuario" class="ml-auto ml-5 text-sm text-white py-1 px-5 bg-transparent rounded-full border outline-none border-1 border-gray-400">
           </div>
           <table class="w-full">
             <thead class="px-5 py-2">
               <tr class="px-5 py-2 border-b border-gray-400">
-                <th class="py-2 text-xs px-5">ID</th>
                 <th class="py-2 text-xs px-5">Nombre</th>
+                <th class="py-2 text-xs px-5">ID</th>
                 <th class="py-2 text-xs px-5">Email</th>
                 <th class="py-2 text-xs px-5">Puesto</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="user in users.entries" :key="user._id" class="px-5 py-2 border-b last:border-b-0 border-gray-400">
-                <th class="py-2 text-xs font-normal px-5">{{user._id}}</th>
-                <th class="py-2 text-xs font-normal px-5">{{user.username}}</th>
-                <th class="py-2 text-xs font-normal px-5">{{user.email}}</th>
-                <th class="py-2 text-xs font-normal px-5">{{user.position || user.admin ? "admin" : "-"}}</th>
+              <tr v-for="user in users.entries" :key="user._id" class="cursor-pointer group hover:bg-main-color px-5 py-2 border-b last:border-b-0 border-gray-400">
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.username || user.name}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user._id.toString()}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.email}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.position || user.admin ? "admin" : "-"}}</th>
               </tr>
             </tbody>
           </table>
@@ -78,11 +79,14 @@ export default {
   async mounted() {
     replace();
     const database = this.$store.state.config.database;
-    console.log(database);
     const db = await connect(database);
     const users = db.collection("users");
     this.users.entries = await users.find(this.users.page * this.users.limit).limit(this.users.limit).toArray();
-    console.log(this.users.entries);
+  },
+  methods: {
+    newUser() {
+      this.$router.push('/newUser')
+    }
   }
 }
 </script>
