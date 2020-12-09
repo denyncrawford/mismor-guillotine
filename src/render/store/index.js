@@ -19,6 +19,10 @@ const store = createStore({
     return {
       config: {},
       firstLoad: {},
+      cardFullView: false,
+      adminView: {
+        selectedUser: {}
+      }
     }
   },
   mutations: {
@@ -33,6 +37,12 @@ const store = createStore({
     },
     logIn(state, payload) {
       state.config.savedSession = payload;
+    },
+    toggleFullViewStatus(state) {
+      state.cardFullView = !state.cardFullView
+    },
+    selectUser(state, payload) {
+      state.adminView.selectedUser = payload;
     }
   }
 })

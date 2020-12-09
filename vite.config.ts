@@ -28,6 +28,7 @@ const config: UserConfig = {
       'electron-store',
       'mongodb',
       'usb-barcode-scanner',
+      'fs-extra',
     ],
     include: [
       'element-plus/lib/locale/lang/es'

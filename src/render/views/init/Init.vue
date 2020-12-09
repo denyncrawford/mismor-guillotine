@@ -68,12 +68,12 @@ export default {
       router.push('/configure')
     },
     notify({title, message}) {
-        this.$notify.error({
+      this.$notify.error({
           title,
           message,
           position: 'bottom-right'
         });
-      },
+    },
   }
 }
 </script>

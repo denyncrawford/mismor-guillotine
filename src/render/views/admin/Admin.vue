@@ -1,5 +1,6 @@
 <template>
-  <page description="Panel de control" title="Modo admin">
+  <page exit="mode" description="Panel de control" title="Modo admin">
+    <user-card ref="userCard"/>
     <div class="mb-5">
       <h1 class="text-lg text-white mb-5">Acciones rapidas</h1>
       <div class="flex">
@@ -41,15 +42,15 @@
                 <th class="py-2 text-xs px-5">Nombre</th>
                 <th class="py-2 text-xs px-5">ID</th>
                 <th class="py-2 text-xs px-5">Email</th>
-                <th class="py-2 text-xs px-5">Puesto</th>
+                <th class="py-2 text-xs px-5">Cargo</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="user in users.entries" :key="user._id" class="cursor-pointer group hover:bg-main-color px-5 py-2 border-b last:border-b-0 border-gray-400">
-                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.username || user.name}}</th>
-                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user._id.toString()}}</th>
+              <tr @dblclick="openCard(index)" v-for="(user, index) in users.entries" :key="user._id" class="cursor-pointer group hover:bg-main-color px-5 py-2 border-b last:border-b-0 border-gray-400">
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.username || user.fullName}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.id || user._id.toString()}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.email}}</th>
-                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.position || user.admin ? "admin" : "-"}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.admin ? "admin" : user.position}}</th>
               </tr>
             </tbody>
           </table>
@@ -61,20 +62,24 @@
 
 <script>
 import Page from '../../components/structure/Page.vue'
+import UserCard from '../../components/UserCard.vue'
 import { connect } from '../../store/index.js'
 import { replace } from 'feather-icons'
+import { mapState } from 'vuex';
 export default {
   data() {
     return {
       users: {
         entries: [],
         page: 0,
-        limit: 10
+        limit: 10,
+        selectedUser: {}
       }
     }
   },
   components: {
-    Page
+    Page,
+    UserCard
   },
   async mounted() {
     replace();
@@ -83,9 +88,18 @@ export default {
     const users = db.collection("users");
     this.users.entries = await users.find(this.users.page * this.users.limit).limit(this.users.limit).toArray();
   },
+  computed: {
+    ...mapState(['cardFullView'])
+  },
   methods: {
     newUser() {
       this.$router.push('/newUser')
+    },
+    openCard(i) {
+      this.$store.commit("selectUser", this.users.entries[i]);
+      this.$store.commit("toggleFullViewStatus");
+      this.$emit('setCode', this.users.entries[i].id);
+      this.$refs.userCard.setCode(this.users.entries[i].id);
     }
   }
 }

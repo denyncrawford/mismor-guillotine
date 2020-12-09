@@ -2,7 +2,7 @@
  * electron 主文件
  */
 import { join } from 'path'
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, protocol } from 'electron'
 import is_dev from 'electron-is-dev'
 import dotenv from 'dotenv'
 
@@ -17,6 +17,7 @@ const createWin = () => {
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
+      webSecurity: false
     },
   })
 
@@ -31,4 +32,10 @@ const createWin = () => {
 
 app.allowRendererProcessReuse = false;
 
-app.whenReady().then(() => createWin())
+app.whenReady().then(() =>{ 
+  protocol.registerFileProtocol('file', (request, callback) => {
+    const pathname = request.url.replace('file:///', '');
+    callback(pathname);
+  });
+  createWin();
+})
