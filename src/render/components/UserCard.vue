@@ -20,7 +20,7 @@
           </div>
         </div>
       </transition>
-      <div class="mt-5">
+      <div class="-mt-5">
         <el-button @click="close" class="bg-back text-red hover:bg-back hover:border-main-color hover:text-main-color">
           Volver
         </el-button>
@@ -36,7 +36,8 @@
 const JsBarcode = require('jsbarcode');
 import { mapState } from 'vuex';
 import { replace } from 'feather-icons';
-import { toPng } from 'html-to-image';
+import { toPng, toSvg } from 'html-to-image';
+const sharp = require('sharp');
 const promisify = require('util').promisify;
 const { dialog } = require('electron').remote;
 const fs = require('fs');
@@ -75,16 +76,49 @@ export default {
     },
     async print() {
       const node = this.$refs.cardtake;
-      let image = await toPng(node)
+      let image = await toPng(node);
       const base64Data = image.replace(/^data:([A-Za-z-+/]+);base64,/, '');
       const savePath = await dialog.showSaveDialog({
           title: "identificacion",
           filters: [
-            { name: 'Images', extensions: ['png'] },
+            { name: 'PNG Files', extensions: ['png'] },
           ]
       });
-      writeFile(savePath.filePath, base64Data, 'base64')
-    }
+      await sharp(new Buffer(base64Data, 'base64'))
+      .resize({
+        kernel: sharp.kernel.mitchell,
+        height: 1000,
+      })
+      .toFile(savePath.filePath)
+      //await writeFile(savePath.filePath, base64Data, 'base64')
+    },
+    compressImage(src, newX, newY) {
+      return new Promise((res, rej) => {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => {
+          const maxW= 3000;
+          const maxH= 3000;
+          const canvas = document.createElement('canvas');
+          let ctx = canvas.getContext("2d");
+          let cw = canvas.width;
+          let ch = canvas.height;
+          let iw = img.width;
+          let ih = img.height;
+          let scale = Math.min((maxW/iw),(maxH/ih));
+          let iwScaled = iw*scale;
+          let ihScaled = ih*scale;
+          canvas.width = iwScaled;
+          canvas.height = ihScaled;
+          ctx.msImageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = "high"
+          ctx.drawImage(img,0,0,iwScaled,ihScaled);
+          const data = ctx.canvas.toDataURL();
+          res(data);
+        }
+        img.onerror = error => rej(error);
+      })
+    },
   }
 }
 </script>>
@@ -105,6 +139,8 @@ export default {
   background-position: center!important;
 }
 .userCard {
+  transition: .2s;
+  transform: scale(0.8);
   background: rgb(0,73,255);
   background: linear-gradient(to top, rgba(0,73,255,1) 0%, rgba(6,182,218,1) 100%);
 }
