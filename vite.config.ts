@@ -29,7 +29,8 @@ const config: UserConfig = {
       'mongodb',
       'usb-barcode-scanner',
       'fs-extra',
-      'sharp'
+      'sharp',
+      'jspdf'
     ],
     include: [
       'element-plus/lib/locale/lang/es'

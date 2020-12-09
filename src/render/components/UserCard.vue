@@ -39,6 +39,8 @@ import { replace } from 'feather-icons';
 import { toPng, toSvg } from 'html-to-image';
 const sharp = require('sharp');
 const promisify = require('util').promisify;
+import html2canvas from 'html2canvas';
+const  { jsPDF } = require('jspdf');
 const { dialog } = require('electron').remote;
 const fs = require('fs');
 const writeFile = promisify(fs.writeFile)
@@ -91,33 +93,6 @@ export default {
       })
       .toFile(savePath.filePath)
       //await writeFile(savePath.filePath, base64Data, 'base64')
-    },
-    compressImage(src, newX, newY) {
-      return new Promise((res, rej) => {
-        const img = new Image();
-        img.src = src;
-        img.onload = () => {
-          const maxW= 3000;
-          const maxH= 3000;
-          const canvas = document.createElement('canvas');
-          let ctx = canvas.getContext("2d");
-          let cw = canvas.width;
-          let ch = canvas.height;
-          let iw = img.width;
-          let ih = img.height;
-          let scale = Math.min((maxW/iw),(maxH/ih));
-          let iwScaled = iw*scale;
-          let ihScaled = ih*scale;
-          canvas.width = iwScaled;
-          canvas.height = ihScaled;
-          ctx.msImageSmoothingEnabled = true;
-          ctx.imageSmoothingQuality = "high"
-          ctx.drawImage(img,0,0,iwScaled,ihScaled);
-          const data = ctx.canvas.toDataURL();
-          res(data);
-        }
-        img.onerror = error => rej(error);
-      })
     },
   }
 }
