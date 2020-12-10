@@ -16,6 +16,8 @@
 <script>
 import Page from '../components/structure/PageCenter.vue'
 import { persistentSotrage as state, connect } from '../../store/index.js'
+import BarcodeScanner from "simple-barcode-scanner";
+const scanner = BarcodeScanner();
 export default {
   data() {
     return {
@@ -38,9 +40,29 @@ export default {
       state.set('config.savedSession', user);
       this.$router.push('/mode');
     },
+    async loginWithScann(id) {
+      const database = this.$store.state.config.database;
+      const db = await connect(database);
+      const users = db.collection("users")
+      let user = await users.findOne({id});
+      if (!user || !user.admin) {
+        this.notify("El usuario no fue encontrado o no es administrador.");
+        return
+      }
+      this.$store.commit('logIn', user)
+      state.set('config.savedSession', user);
+      this.$router.push('/mode');
+      scanner.off();
+    },
     notify(message) {
       this.$message.error({message, showClose: true,});
     },
+  },
+  mounted() {
+    scanner.on((id, e) => {
+      e.preventDefault();
+      this.loginWithScann(id)
+    })
   },
   components: {
     Page,

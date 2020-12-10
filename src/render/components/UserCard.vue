@@ -36,15 +36,15 @@
 const JsBarcode = require('jsbarcode');
 import { mapState } from 'vuex';
 import { replace } from 'feather-icons';
-import { toPng, toSvg } from 'html-to-image';
+import { toPng } from 'html-to-image';
 const sharp = require('sharp');
-const promisify = require('util').promisify;
-import html2canvas from 'html2canvas';
+// const { promisify } = require('util');
+// const fs = require('fs')
+// import html2canvas from 'html2canvas';
 const  { jsPDF } = require('jspdf');
 const { dialog } = require('electron').remote;
-const fs = require('fs');
-const writeFile = promisify(fs.writeFile)
 const path = require('path')
+// const writeFile = promisify(fs.writeFile);
 export default {
   mounted() {
     replace()
@@ -78,7 +78,12 @@ export default {
     },
     async print() {
       const node = this.$refs.cardtake;
-      let image = await toPng(node);
+      let image = await toPng(node, {
+        style: {
+          width: node.offsetWidth * 10,
+          height: node.offsetHeight * 10
+        }
+      });
       const base64Data = image.replace(/^data:([A-Za-z-+/]+);base64,/, '');
       const savePath = await dialog.showSaveDialog({
           title: "identificacion",
@@ -92,7 +97,7 @@ export default {
         height: 1000,
       })
       .toFile(savePath.filePath)
-      //await writeFile(savePath.filePath, base64Data, 'base64')
+      // await writeFile(savePath.filePath, base64Data, 'base64')
     },
   }
 }

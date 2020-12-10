@@ -14,6 +14,8 @@
 <script>
 import Page from '../components/structure/PageCenter.vue'
 import Inpt from '../components/structure/Input.vue'
+import BarcodeScanner from "simple-barcode-scanner";
+const scanner = BarcodeScanner();
 export default {
   data() {
     return {
@@ -29,14 +31,27 @@ export default {
     back() {
       this.$router.go(-1)
     },
-    go() {
-      const password = this.$store.state.config.savedSession.password;
+    go(code) {
       const go = this.$route.params.go
-      if (this.password !== password) {
-        this.notify({title:"Contraseña invalida", message: "Por favor introduzca una contraseña valida"});
-        return
+      if (typeof code === "string") {
+        let id = this.$store.state.config.savedSession.id || this.$store.state.config.savedSession._id;
+        if (code == id) {
+          this.$router.push(`/${go}`)
+          scanner.off()
+          return
+        } else if (code && !id) {
+            this.notify({message: "Vuelva a iniciar sesión para autenticar con scanner."});
+        } else if (code != id) {
+            this.notify({message: "Usuario invalido."});
+        }
+      } else {
+        const password = this.$store.state.config.savedSession.password;
+        if (this.password !== password) {
+          this.notify({title:"Contraseña invalida", message: "Por favor introduzca una contraseña valida"});
+          return
+        }
+        this.$router.push(`/${go}`)
       }
-      this.$router.push(`/${go}`)
     },
     notify({
       title,
@@ -44,6 +59,12 @@ export default {
     }) {
       this.$message.error({message, showClose: true,});
     },
+  },
+  mounted() {
+    scanner.on((code, event) => {
+      event.preventDefault();
+      this.go(code);
+    });
   },
   components: {
     Page,

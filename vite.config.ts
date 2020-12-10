@@ -30,7 +30,8 @@ const config: UserConfig = {
       'usb-barcode-scanner',
       'fs-extra',
       'sharp',
-      'jspdf'
+      'jspdf',
+      'node-hid'
     ],
     include: [
       'element-plus/lib/locale/lang/es'

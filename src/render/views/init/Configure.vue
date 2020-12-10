@@ -13,7 +13,7 @@
             v-for="(device, i) of devices"
             :key="i"
             :label="`${device.manufacturer} - ${device.product}`"
-            :value="device.path">
+            :value="JSON.stringify(device)">
           </el-option>
         </el-select>
       </div>
@@ -33,11 +33,11 @@
 import Page from '../../components/structure/Page.vue'
 import Loader from '../../components/Loader.vue'
 import { persistentSotrage as state, connect } from '../../store/index.js'
-const { getDevices } = require('usb-barcode-scanner');
+const { devices: getDevices } = require('node-hid');
 export default {
   data() {
     return {
-      selectedDevice : "",
+      selectedDevice: "",
       database: "",
       defaultDatabase: "guillotine",
       isLoading: false
@@ -60,6 +60,7 @@ export default {
     async save() {
       let { selectedDevice, database } = this;
       database = database || this.defaultDatabase; 
+      selectedDevice = JSON.parse(selectedDevice)
       const db = await connect(database);
       const users = db.collection("users")
       this.isLoading = true;
