@@ -2,7 +2,7 @@
   <div v-show="cardFullView" class="fixed -top-0 -left-0 bg-back h-screen w-screen bg-opacity-60">
     <div class="relative w-screen h-screen flex flex-col items-center justify-center">
       <transition name="slide5">
-        <div v-show="cardFullView" ref="cardtake" class="userCard bg-gradient-to-b from-teal-400 to-blue-600  p-8 rounded-3xl">
+        <div id="card" v-show="cardFullView" ref="cardtake" class="userCard bg-gradient-to-b from-teal-400 to-blue-600  p-8 rounded-3xl">
           <div class="flex flex-col items-center justify-center">
             <div :style="[user?.file ? { background: `url(${image})` } : {background : 'blue'}]" class="userimage bg-center bg-cover bg-no-repeat w-44 h-44 bg-indigo-800 rounded-full"></div>
             <div class="mt-5 uppercase text-white font-bold">
@@ -36,12 +36,12 @@
 const JsBarcode = require('jsbarcode');
 import { mapState } from 'vuex';
 import { replace } from 'feather-icons';
-import { toPng } from 'html-to-image';
+import { toCanvas, toPng } from '@denyncrawford/html-to-image';
 const sharp = require('sharp');
 // const { promisify } = require('util');
 // const fs = require('fs')
+// const  { jsPDF } = require('jspdf');
 // import html2canvas from 'html2canvas';
-const  { jsPDF } = require('jspdf');
 const { dialog } = require('electron').remote;
 const path = require('path')
 // const writeFile = promisify(fs.writeFile);
@@ -49,7 +49,7 @@ export default {
   mounted() {
     replace()
     JsBarcode("#barcode", this.user?.id || 'null', {
-        background: "transparent",
+        background: "white",
         height: 50,
         fontSize: 13,
         width: 1.4
@@ -70,7 +70,7 @@ export default {
     },
     setCode(id) {
       JsBarcode("#barcode", this.user.id, {
-        background: "transparent",
+        background: "white",
         height: 50,
         fontSize: 13,
         width: 1.4
@@ -78,12 +78,11 @@ export default {
     },
     async print() {
       const node = this.$refs.cardtake;
-      let image = await toPng(node, {
-        style: {
-          width: node.offsetWidth * 10,
-          height: node.offsetHeight * 10
-        }
+      let canvas = await toCanvas(node, {
+        pixelRatio: 3
       });
+      canvas.style.transform = "scale3d(0.5,0.5,0)";
+      var image = canvas.toDataURL();
       const base64Data = image.replace(/^data:([A-Za-z-+/]+);base64,/, '');
       const savePath = await dialog.showSaveDialog({
           title: "identificacion",

@@ -48,6 +48,7 @@
     }
   },
   "dependencies": {
+    "@denyncrawford/html-to-image": "github:denyncrawford/html-to-image",
     "animate.css": "^4.1.1",
     "electron-is-dev": "^1.2.0",
     "electron-store": "^6.0.0",
@@ -55,7 +56,7 @@
     "events": "^3.2.0",
     "feather-icons": "^4.28.0",
     "fs-extra": "^8.1.0",
-    "html-to-image": "^1.3.20",
+    "html2canvas": "^1.0.0-rc.7",
     "jsbarcode": "^3.11.3",
     "jspdf": "^2.2.0",
     "mongodb": "^3.6.3",
