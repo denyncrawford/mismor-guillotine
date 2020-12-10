@@ -13,7 +13,7 @@ let win = null
 const createWin = () => {
   win = new BrowserWindow({
     width: 1000,
-    height: 500,
+    height: 580,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,

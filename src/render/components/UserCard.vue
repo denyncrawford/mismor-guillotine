@@ -49,8 +49,9 @@ export default {
   mounted() {
     replace()
     JsBarcode("#barcode", this.user?.id || 'null', {
-        background: "white",
+        background: "transparent",
         height: 50,
+        lineColor: "white",
         fontSize: 13,
         width: 1.4
     });
@@ -70,8 +71,9 @@ export default {
     },
     setCode(id) {
       JsBarcode("#barcode", this.user.id, {
-        background: "white",
+        background: "transparent",
         height: 50,
+        lineColor: "white",
         fontSize: 13,
         width: 1.4
       });
@@ -119,7 +121,6 @@ export default {
 }
 .userCard {
   transition: .2s;
-  transform: scale(0.8);
   background: rgb(0,73,255);
   background: linear-gradient(to top, rgba(0,73,255,1) 0%, rgba(6,182,218,1) 100%);
 }

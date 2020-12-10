@@ -12,6 +12,9 @@
         <p class="group-hover:text-back text-gray-400">Utilizar en modo marcador para poder acceder a un nuevo marcado de turnos.</p>
       </router-link>
     </div>
+    <div>
+      <p class="text-gray-400 mt-10">Los modos son las maneras de utilizar la aplicación.</p>
+    </div>
     <div class="grid w-10/12">
       <el-button @click="logOut" class="mt-10 bg-back text-red hover:bg-back hover:border-main-color hover:text-main-color">Salir</el-button>
     </div>
