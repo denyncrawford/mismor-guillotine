@@ -6,20 +6,13 @@
         description="Esta es la configuración del programa"
       >
       <div>
-        <h2 class="mb-2 font-bold text-blue-400">Seleccionar lector</h2>
-        <el-select class="text-white mb-5" v-model="selectedDevice" placeholder="Select">
-          <el-option
-            class="bg-back hover:bg-main-color hover:text-back text-white border-main-color"
-            v-for="(device, i) of devices"
-            :key="i"
-            :label="`${device.manufacturer} - ${device.product}`"
-            :value="JSON.stringify(device)">
-          </el-option>
-        </el-select>
+        <h2 class="mb-2 font-bold text-blue-400">Indicar el prefijo del lector</h2>
+        <input v-model="selectedDevice" ref="psw" type="text" placeholder="Prefijo" class="mb-5 text-gray-500 py-2 px-5 bg-transparent rounded border outline-none border-1 border-blue-400">
+        <p class="mb-5 group-hover:text-back text-gray-400">Debe configurar el prefijo en el scanner para utilizarlo.</p>    
       </div>
       <div>
         <h2 class="mb-2 font-bold text-blue-400">Escribe un nombre para la base de datos</h2>
-        <input v-model="database" ref="psw" type="text" placeholder="guillotine (default)" class="mb-5 text-gray-500 py-2 px-5 bg-transparent rounded border outline-none border-1 border-blue-400">
+        <input v-model="database" ref="psw" type="text" placeholder="guillotine (default)" class="mb-5 text-gray-500 py-2 px-5 bg-transparent rounded border outline-none border-1 border-blue-400">  
       </div>
       <div class="mt-5">
         <el-button @click="back" class="bg-back text-red hover:bg-back hover:border-main-color hover:text-main-color">Regresar</el-button>
@@ -33,7 +26,6 @@
 import Page from '../../components/structure/Page.vue'
 import Loader from '../../components/Loader.vue'
 import { persistentSotrage as state, connect } from '../../store/index.js'
-const { devices: getDevices } = require('node-hid');
 export default {
   data() {
     return {
@@ -47,20 +39,13 @@ export default {
     Page,
     Loader
   },
-  setup() {
-    let devices = getDevices();
-    return {
-      devices
-    }
-  },
   methods: {
     back() {
       this.$router.go(-1)
     },
     async save() {
       let { selectedDevice, database } = this;
-      database = database || this.defaultDatabase; 
-      selectedDevice = JSON.parse(selectedDevice)
+      database = database || this.defaultDatabase;
       const db = await connect(database);
       const users = db.collection("users")
       this.isLoading = true;

@@ -15,7 +15,7 @@
 import Page from '../components/structure/PageCenter.vue'
 import Inpt from '../components/structure/Input.vue'
 import BarcodeScanner from "simple-barcode-scanner";
-const scanner = BarcodeScanner();
+let scanner;
 export default {
   data() {
     return {
@@ -61,6 +61,9 @@ export default {
     },
   },
   mounted() {
+    scanner = BarcodeScanner({
+      devicePrefix: this.$store.state.config.selectedDevice
+    });
     scanner.on((code, event) => {
       event.preventDefault();
       this.go(code);

@@ -63,7 +63,7 @@
     "node-hid": "^2.0.0-0",
     "sharp": "^0.26.3",
     "shortid": "^2.2.16",
-    "simple-barcode-scanner": "^2.0.0",
+    "simple-barcode-scanner": "git+https://github.com/denyncrawford/simple-barcode-scanner.git#device-instance",
     "tailwindcss": "compat",
     "vue": "^3.0.2",
     "vue-router": "^4.0.0-rc.6",

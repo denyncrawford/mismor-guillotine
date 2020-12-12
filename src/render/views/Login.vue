@@ -17,7 +17,7 @@
 import Page from '../components/structure/PageCenter.vue'
 import { persistentSotrage as state, connect } from '../../store/index.js'
 import BarcodeScanner from "simple-barcode-scanner";
-const scanner = BarcodeScanner();
+let scanner;
 export default {
   data() {
     return {
@@ -59,6 +59,9 @@ export default {
     },
   },
   mounted() {
+    scanner = BarcodeScanner({
+      devicePrefix: this.$store.state.config.selectedDevice
+    });
     scanner.on((id, e) => {
       e.preventDefault();
       this.loginWithScann(id)

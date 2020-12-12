@@ -38,13 +38,8 @@ import { mapState } from 'vuex';
 import { replace } from 'feather-icons';
 import { toCanvas, toPng } from '@denyncrawford/html-to-image';
 const sharp = require('sharp');
-// const { promisify } = require('util');
-// const fs = require('fs')
-// const  { jsPDF } = require('jspdf');
-// import html2canvas from 'html2canvas';
 const { dialog } = require('electron').remote;
 const path = require('path')
-// const writeFile = promisify(fs.writeFile);
 export default {
   mounted() {
     replace()
