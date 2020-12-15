@@ -60,6 +60,7 @@
     "jsbarcode": "^3.11.3",
     "jspdf": "^2.2.0",
     "mongodb": "^3.6.3",
+    "native-barcode-scanner": "^1.2.0",
     "node-hid": "^2.0.0-0",
     "sharp": "^0.26.3",
     "shortid": "^2.2.16",
