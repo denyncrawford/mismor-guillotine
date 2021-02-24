@@ -29,6 +29,7 @@
 
 <script>
 import Page from '../../components/structure/Page.vue'
+import { formatUser } from '../../scripts/helpers.js'
 export default {
   data() {
     return {
@@ -56,6 +57,7 @@ export default {
     init() {
       const router = this.$router;
       let { sign } = this;
+      sign = formatUser(sign);
       for (let k in sign) {
         if (!sign[k]) {
           this.$refs[k].style.borderColor = 'red';
@@ -63,8 +65,8 @@ export default {
         }
       }
       if (sign.psw !== sign.rpsw) return this.notify({title:"La contraseña no coincide", message: "Por favor verificar"})
-      let { psw: password, name: username, email } = sign;
-      this.$store.commit("updateFirtsLoad", { savedSession: {password, username, email} })
+      let { psw: password, name: username, email, id } = sign;
+      this.$store.commit("updateFirtsLoad", { savedSession: { password, username, email, id } })
       router.push('/configure')
     },
     notify({title, message}) {

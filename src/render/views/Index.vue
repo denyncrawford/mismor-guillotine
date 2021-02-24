@@ -1,57 +1,65 @@
 <template>
-  <div class="logo-box">
-    <svg data-v-45502113="" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="500px" y="0px" viewBox="0 0 1024 1024" xml:space="preserve"><g data-v-45502113="" fill="currentColor"><polygon data-v-45502113="" id="Fill-1" points="0,265 285.3,992.6 316.9,193.8 	" class="st0"></polygon> <polygon data-v-45502113="" id="Fill-2" points="389.3,180.1 295.3,993.7 1024,30.3 	" class="st0"></polygon></g></svg>
-  </div>
-  <Helo :msg="`Electron ${ state.version }`" />
-  <Helo msg="Vue 3.0 + Vite" />
-  <div>
-    <el-button style="width: 60%;" @click="increment">点我</el-button>
-  </div>
-  <p>count: {{state.count}}</p>
-  <p>double: {{state.double}}</p>
-  <router-link class="success" to="/create">跳转路由</router-link>
+  <page :description="`Introduce la id de usauario o escanea.`" title="Marcar">
+    <div>
+      <div>
+        <h1 class="text-3xl text-white mb-8">{{date}}</h1>
+      </div>
+      <input type="id" v-model="code" placeholder="ID de usauario" class="text-white py-2 px-5 bg-transparent rounded border outline-none border-1 border-blue-400">
+      <p class="mt-8 text-sm text-white">Necesita verificar la cuenta para poder continuar.</p>
+    </div>
+    <div class="mt-5">
+      <el-button @click="back" class="bg-back text-red hover:bg-back hover:border-main-color hover:text-main-color">Regresar</el-button>
+      <el-button @click="marcar" class="bg-main-color text-back hover:text-back" type="primary">Marcar</el-button>
+    </div>
+  </page>
 </template>
 
 <script>
-import Helo from '../components/HelloWorld.vue'
-import { reactive, computed } from 'vue'
-const version = require('process').versions.electron
+import Page from '../components/structure/PageCenter.vue'
+import Inpt from '../components/structure/Input.vue'
+const BarcodeScanner = require("native-barcode-scanner");
+import dayjs from 'dayjs';
+let scanner;
 export default {
-  name: 'Index',
-  components: {
-    Helo
-  },
-  setup() {
-    const state = reactive({
-      count: 0,
-      double: computed(() => state.count * 2),
-      version: version
-    })
-
-    function increment() {
-      state.count++
-    }
-
+  data() {
     return {
-      state,
-      increment,
+      code: "",
+      date: dayjs().format('hh:mm')
     }
   },
+  methods: {
+    back() {
+      this.$router.go(-1)
+    },
+    marcar(code) {
+      code = !code || typeof code !== 'string' ? this.code : code;
+      if (!code) this.notify({ message: "Por favor introduzca un usuario valido." });
+      
+    },
+    notify({
+      title,
+      message
+    }) {
+      this.$message.error({message, showClose: true});
+    },
+  },
+  mounted() {
+    scanner = new BarcodeScanner({
+      endKey: 'Intro'
+    });
+    scanner.on('code', code => {
+      this.marcar(code);
+    });
+    setInterval(() => {
+      this.date = dayjs().format('hh:mm');
+    }, 1000)
+  },
+  beforeUnmount() {
+    scanner.off()
+  },
+  components: {
+    Page,
+    Inpt
+  }
 }
 </script>
-
-<style lang="scss" scoped>
-.logo-box {
-  width: 20%;
-  margin-left: 130px;
-}
-.success {
-  background: #00c13c;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 80px;
-  color: #fff;
-  text-decoration: none;
-}
-</style>
-

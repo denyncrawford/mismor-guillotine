@@ -43,6 +43,7 @@
                 <th class="py-2 text-xs px-5">ID</th>
                 <th class="py-2 text-xs px-5">Email</th>
                 <th class="py-2 text-xs px-5">Cargo</th>
+                <th class="py-2 text-xs px-5">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -51,9 +52,19 @@
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.id || user._id.toString()}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.email}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.admin ? "admin" : user.position}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">
+                  <div class="rounded-full">
+                    <i data-feather="edit" class="w-5 mr-2 inline text-sm group-hover:text-back text-gray-400"></i>
+                    <i data-feather="eye" class="w-5 mr-2 inline text-sm group-hover:text-back text-gray-400"></i>
+                    <i data-feather="trash" class="w-5 mr-2 inline text-sm group-hover:text-back text-gray-400"></i>
+                  </div>
+                </th>
               </tr>
             </tbody>
           </table>
+        </div>
+        <div>
+          <h3 class="text-md text-gray-400 mt-5 mb-5">Mostrando {{ users.entries.length }} de {{ users.total }} colaboradores.</h3>
         </div>
       </div>
     </div>
@@ -70,10 +81,13 @@ export default {
   data() {
     return {
       users: {
+        collection: null,
         entries: [],
         page: 0,
         limit: 10,
-        selectedUser: {}
+        selectedUser: {},
+        total: 0,
+        search: ''
       }
     }
   },
@@ -82,11 +96,15 @@ export default {
     UserCard
   },
   async mounted() {
-    replace();
     const database = this.$store.state.config.database;
     const db = await connect(database);
-    const users = db.collection("users");
-    this.users.entries = await users.find(this.users.page * this.users.limit).limit(this.users.limit).toArray();
+    this.users.collection = db.collection("users");
+    this.users.total = await this.users.collection.count()
+    this.users.entries = await this.users.collection.find(this.users.page * this.users.limit).limit(this.users.limit).toArray();
+    replace();
+  },
+  updated() {
+    replace();
   },
   computed: {
     ...mapState(['cardFullView'])

@@ -29,6 +29,7 @@ export default {
   },
   methods: {
     back() {
+      scanner.off()
       this.$router.go(-1)
     },
     go(code) {
