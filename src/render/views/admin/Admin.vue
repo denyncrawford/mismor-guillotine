@@ -34,7 +34,7 @@
         <div class="rounded-lg border overflow-hidden border-gray-400">
           <div class="items-center border-b border-gray-400 flex px-5 py-2">
             <h1 class="text-md text-white">Base de datos</h1>
-            <input type="text" placeholder="Buscar usuario" class="ml-auto ml-5 text-sm text-white py-1 px-5 bg-transparent rounded-full border outline-none border-1 border-gray-400">
+            <input @keydown="searchUsers" @keyup="searchUsers" v-model="users.search" type="text" placeholder="Buscar usuario" class="ml-auto ml-5 text-sm text-white py-1 px-5 bg-transparent rounded-full border outline-none border-1 border-gray-400">
           </div>
           <table class="w-full">
             <thead class="px-5 py-2">
@@ -63,8 +63,11 @@
             </tbody>
           </table>
         </div>
-        <div>
+        <div class="flex items-center">
           <h3 class="text-md text-gray-400 mt-5 mb-5">Mostrando {{ users.entries.length }} de {{ users.total }} colaboradores.</h3>
+          <div class="ml-auto">
+             <h3 class="text-md text-gray-400 mt-5 mb-5">Pagina {{ users.page }} de {{ users.pages }}</h3>
+          </div>
         </div>
       </div>
     </div>
@@ -87,7 +90,8 @@ export default {
         limit: 10,
         selectedUser: {},
         total: 0,
-        search: ''
+        search: '',
+        pages: 0
       }
     }
   },
@@ -100,6 +104,7 @@ export default {
     const db = await connect(database);
     this.users.collection = db.collection("users");
     this.users.total = await this.users.collection.count()
+    this.users.pages = Math.round(this.users.total / 10)
     this.users.entries = await this.users.collection.find(this.users.page * this.users.limit).limit(this.users.limit).toArray();
     replace();
   },
@@ -118,6 +123,23 @@ export default {
       this.$store.commit("toggleFullViewStatus");
       this.$emit('setCode', this.users.entries[i].id);
       this.$refs.userCard.setCode(this.users.entries[i].id);
+    },
+    async searchUsers() {
+      this.users.entries = this.users.search.length ? this.users.entries = await this.users.collection.find({
+        $or: [
+          { fullName: new RegExp(this.users.search, 'i') },
+          { id: new RegExp(this.users.search, 'i') },
+          { username: new RegExp(this.users.search, 'i') }
+        ]
+      }).skip(this.users.page * this.users.limit).limit(this.users.limit).toArray() : await this.users.collection.find(this.users.page * this.users.limit).limit(this.users.limit).toArray();
+      this.users.total = this.users.search.length ? await this.users.collection.count({
+        $or: [
+          { fullName: new RegExp(this.users.search, 'i') },
+          { id: new RegExp(this.users.search, 'i') },
+          { username: new RegExp(this.users.search, 'i') }
+        ]
+      }) : await this.users.collection.count();
+      this.users.pages = Math.round(this.users.total / 10)
     }
   }
 }

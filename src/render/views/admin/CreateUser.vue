@@ -57,7 +57,7 @@ import Page from '../../components/structure/Page.vue'
 const { copy } = require('fs-extra');
 const { join } = require('path');
 import shortid from 'shortid'
-import formatUser from "../../scripts/formatUser.js"
+import { formatUser } from "../../scripts/helpers.js"
 const { dialog, app } = require('electron').remote;
 import { replace } from 'feather-icons'
 import { connect } from '../../store/index.js'
