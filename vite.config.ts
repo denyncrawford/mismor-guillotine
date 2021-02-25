@@ -31,7 +31,8 @@ const config: UserConfig = {
       'sharp',
       'jspdf',
       'node-hid',
-      'native-barcode-scanner'
+      'native-barcode-scanner',
+      'pdf-to-printer'
     ],
     include: [
       'element-plus/lib/locale/lang/es'

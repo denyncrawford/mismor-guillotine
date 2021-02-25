@@ -36,10 +36,10 @@
 const JsBarcode = require('jsbarcode');
 import { mapState } from 'vuex';
 import { replace } from 'feather-icons';
-import { toCanvas, toPng } from '@denyncrawford/html-to-image';
-const sharp = require('sharp');
+import { toCanvas } from '@denyncrawford/html-to-image';
+const { jsPDF } = require('jspdf');
 const { dialog } = require('electron').remote;
-const path = require('path')
+const ptp =  require("pdf-to-printer")
 export default {
   mounted() {
     replace()
@@ -85,18 +85,15 @@ export default {
           title: "identificacion",
           defaultPath: this.user.id,
           filters: [
-            { name: 'PNG Files', extensions: ['png'] },
+            { name: 'PDF Files', extensions: ['pdf'] },
           ]
       });
-      await sharp(new Buffer(base64Data, 'base64'), {
-        density: 300
-      })
-      .resize({
-        kernel: sharp.kernel.mitchell,
-        height: 1331,
-      })
-      .toFile(savePath.filePath)
-      // await writeFile(savePath.filePath, base64Data, 'base64')
+      const pdf = new jsPDF();
+      pdf.addImage(base64Data, 'png', 10, 10, 64, 113)
+      pdf.save(savePath.filePath);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      await ptp.print(savePath.filePath)
+
     },
   }
 }
