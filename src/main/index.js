@@ -12,7 +12,7 @@ let win = null
 
 const createWin = () => {
   win = new BrowserWindow({
-    width: 1000,
+    width: 1100,
     height: 580,
     webPreferences: {
       nodeIntegration: true,
@@ -22,9 +22,9 @@ const createWin = () => {
   })
 
   const URL = is_dev ?
-    `http://localhost:${process.env.PORT}` // vite 启动的服务器地址
+    `http://localhost:${process.env.PORT}`
     :
-    `file://${join(__dirname, '../../dist/render/index.html')}` // vite 构建后的静态文件地址
+    `file://${join(__dirname, '../../dist/render/index.html')}`
 
   win.setMenuBarVisibility(false)
   win.loadURL(URL);

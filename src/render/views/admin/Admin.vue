@@ -30,7 +30,7 @@
     </div>
     <div>
       <h1 class="text-lg text-white mb-5">Colaboradores</h1>
-      <div class="container">
+      <div>
         <div class="rounded-lg border overflow-hidden border-gray-400">
           <div class="items-center border-b border-gray-400 flex px-5 py-2">
             <h1 class="text-md text-white">Base de datos</h1>
@@ -53,10 +53,10 @@
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.email}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.admin ? "admin" : user.position}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">
-                  <div class="rounded-full">
-                    <i data-feather="edit" class="w-5 mr-2 inline text-sm group-hover:text-back text-gray-400"></i>
-                    <i data-feather="eye" class="w-5 mr-2 inline text-sm group-hover:text-back text-gray-400"></i>
-                    <i data-feather="trash" class="w-5 mr-2 inline text-sm group-hover:text-back text-gray-400"></i>
+                  <div class="flex">
+                    <button class="rounded-full px-2 mr-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.edit"></button>
+                    <button class="rounded-full px-2 mr-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.eye"></button>
+                    <button class="rounded-full px-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.trash"></button>
                   </div>
                 </th>
               </tr>
@@ -78,7 +78,7 @@
 import Page from '../../components/structure/Page.vue'
 import UserCard from '../../components/UserCard.vue'
 import { connect } from '../../store/index.js'
-import { replace } from 'feather-icons'
+import { replace, icons as fIcons } from 'feather-icons'
 import { mapState } from 'vuex';
 export default {
   data() {
@@ -92,6 +92,11 @@ export default {
         total: 0,
         search: '',
         pages: 0
+      },
+      icons: {
+        edit: fIcons.edit.toSvg({width: 14}),
+        eye: fIcons.eye.toSvg({width: 14}),
+        trash: fIcons.trash.toSvg({width: 14})
       }
     }
   },
