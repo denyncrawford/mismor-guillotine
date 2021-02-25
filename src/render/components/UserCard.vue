@@ -83,14 +83,17 @@ export default {
       const base64Data = image.replace(/^data:([A-Za-z-+/]+);base64,/, '');
       const savePath = await dialog.showSaveDialog({
           title: "identificacion",
+          defaultPath: this.user.id,
           filters: [
             { name: 'PNG Files', extensions: ['png'] },
           ]
       });
-      await sharp(new Buffer(base64Data, 'base64'))
+      await sharp(new Buffer(base64Data, 'base64'), {
+        density: 300
+      })
       .resize({
         kernel: sharp.kernel.mitchell,
-        height: 1000,
+        height: 1331,
       })
       .toFile(savePath.filePath)
       // await writeFile(savePath.filePath, base64Data, 'base64')
