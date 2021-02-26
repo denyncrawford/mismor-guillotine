@@ -93,7 +93,6 @@ export default {
       pdf.save(savePath.filePath);
       await new Promise(resolve => setTimeout(resolve, 2000));
       await ptp.print(savePath.filePath)
-
     },
   }
 }

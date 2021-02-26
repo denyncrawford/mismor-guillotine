@@ -1,7 +1,7 @@
 <template>
   <page :description="`Confirme la salida del sistema`" title="Cerrar sesión">
     <div>
-      <p class="mt-8 text-sm text-white">Actualmente la cuenta <span class="text-main-color">{{account?.username}}</span> Está en sesión.</p>
+      <p class="mt-8 text-sm text-white">Actualmente la cuenta <span class="text-main-color">{{account?.username}}</span> está en sesión.</p>
     </div>
     <div class="mt-8">
       <el-button @click="back" class="bg-back text-red hover:bg-back hover:border-main-color hover:text-main-color">Regresar</el-button>

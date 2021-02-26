@@ -32,7 +32,7 @@ export default {
       const db = await connect(database);
       const users = db.collection("users")
       let user = await users.findOne({username});
-      if (!user || this.password !== user.password) {
+      if (!user || this.password !== user.password || !this.password || !this.username) {
         this.notify("El usuario o la contraseña no coinciden.");
         return
       }
