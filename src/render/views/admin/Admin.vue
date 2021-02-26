@@ -54,7 +54,7 @@
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.admin ? "admin" : user.position}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">
                   <div class="flex">
-                    <button class="rounded-full px-2 mr-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.edit"></button>
+                    <button @click="openUser(user.id)" class="rounded-full px-2 mr-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.edit"></button>
                     <button class="rounded-full px-2 mr-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.eye"></button>
                     <button class="rounded-full px-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.trash"></button>
                   </div>
@@ -65,8 +65,16 @@
         </div>
         <div class="flex items-center">
           <h3 class="text-md text-gray-400 mt-5 mb-5">Mostrando {{ users.entries.length }} de {{ users.total }} colaboradores.</h3>
-          <div class="ml-auto">
+          <div class="ml-auto flex items-center">
              <h3 class="text-md text-gray-400 mt-5 mb-5">Pagina {{ users.page }} de {{ users.pages }}</h3>
+             <div class="flex mx-6 cursor-pointer">
+               <div class="px-2 group hover:bg-main-color rounded-l-md">
+                 <i data-feather="chevron-left" class="w-5 inline text-sm group-hover:text-back text-gray-400"></i>
+               </div>
+               <div class="px-2 group hover:bg-main-color rounded-r-md">
+                 <i data-feather="chevron-right" class="w-5 inline text-sm group-hover:text-back text-gray-400"></i>
+               </div>
+             </div>
           </div>
         </div>
       </div>
@@ -128,6 +136,9 @@ export default {
       this.$store.commit("toggleFullViewStatus");
       this.$emit('setCode', this.users.entries[i].id);
       this.$refs.userCard.setCode(this.users.entries[i].id);
+    },
+    openUser(id) {
+      this.$router.push(`/editUser/${id}`)
     },
     async searchUsers() {
       this.users.entries = this.users.search.length ? this.users.entries = await this.users.collection.find({
