@@ -89,10 +89,10 @@ export default {
    animation-duration: .2s;
   }
 
-  .slide3-leave-active {
+.slide3-leave-active {
     animation: fadeOutUp;
     animation-duration: .2s;
-  }
+}
 
 .el-select {
   min-width: 266px;

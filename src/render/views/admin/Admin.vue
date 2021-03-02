@@ -54,8 +54,8 @@
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.admin ? "admin" : user.position}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">
                   <div class="flex">
-                    <button @click="openUser(user.id)" class="rounded-full px-2 mr-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.edit"></button>
-                    <button class="rounded-full px-2 mr-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.eye"></button>
+                    <button @click="editUser(user.id)" class="rounded-full px-2 mr-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.edit"></button>
+                    <button @click="openUser(user.id)" class="rounded-full px-2 mr-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.eye"></button>
                     <button class="rounded-full px-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.trash"></button>
                   </div>
                 </th>
@@ -137,8 +137,11 @@ export default {
       this.$emit('setCode', this.users.entries[i].id);
       this.$refs.userCard.setCode(this.users.entries[i].id);
     },
-    openUser(id) {
+    editUser(id) {
       this.$router.push(`/editUser/${id}`)
+    },
+    openUser(id) {
+      this.$router.push(`/profile/${id}`)
     },
     async searchUsers() {
       this.users.entries = this.users.search.length ? this.users.entries = await this.users.collection.find({

@@ -99,6 +99,14 @@ const router = createRouter({
           title: 'Editar colaborador'
       }
     },
+    {
+      path: '/profile/:id',
+      name: 'profile',
+      component: () => import('./views/admin/UserProfile.vue'),
+      meta: {
+          title: 'Perfil de usuario'
+      }
+    },
   ]
 })
 
