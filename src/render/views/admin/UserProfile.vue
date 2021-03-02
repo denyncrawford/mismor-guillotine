@@ -13,6 +13,9 @@
               <h2 class="mb-2 mt-2 text-sm text-white"><span class="font-bold text-gray-400">DNI:</span> {{user.dni}}</h2>
               <h2 class="mb-2 mt-2 text-sm text-white"><span class="font-bold text-gray-400">Usuario:</span> {{user.username}}</h2>
               <h2 class="mb-2 mt-2 text-sm text-white"><span class="font-bold text-gray-400">ID:</span> {{user.id}}</h2>
+              <div class="-ml-2">
+                <svg id="barcode"></svg>
+              </div>
             </div>
           </transition>
           <h2 @click="see = !see" v-show="!see" class="mt-2 text-xs mb-2 font-bold text-main-color cursor-pointer">VER MAS</h2>
@@ -28,10 +31,12 @@
 </template>
 <script>
 
+const JsBarcode = require('jsbarcode');
 import Page from '../../components/structure/Page.vue'
 import { connect } from '../../store/index.js'
 import dayjs from 'dayjs';
 import { replace, icons as fIcons } from 'feather-icons'
+
 export default {
   data() {
     return {
@@ -66,6 +71,13 @@ export default {
     this.users = db.collection("users");
     const { id } = this.$route.params;
     this.user = await this.users.findOne({id})
+    JsBarcode("#barcode", this.user?.id || 'null', {
+        background: "transparent",
+        height: 50,
+        lineColor: "white",
+        fontSize: 13,
+        width: 1.4
+    });
   },
   methods: {
     editUser(id) {
