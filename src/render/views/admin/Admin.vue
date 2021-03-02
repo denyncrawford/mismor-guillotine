@@ -79,6 +79,9 @@
         </div>
       </div>
     </div>
+    <div class="mb-5">
+      <h1 class="text-lg text-white mb-5">Turnos</h1>
+    </div>
   </page>
 </template>
 

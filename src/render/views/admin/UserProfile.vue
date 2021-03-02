@@ -27,6 +27,9 @@
         </div>
       </div>
     </div>
+    <div class=" mt-8 mb-5">
+      <h1 class="text-lg text-white mb-5">Turnos</h1>
+    </div>
   </div>
 </template>
 <script>
