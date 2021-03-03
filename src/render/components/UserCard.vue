@@ -1,5 +1,5 @@
 <template>
-  <div v-show="cardFullView" class="fixed -top-0 -left-0 bg-back h-screen w-screen bg-opacity-60">
+  <div v-show="cardFullView" class="fixed -top-0 -left-0 z-10 bg-back h-screen w-screen bg-opacity-60">
     <div class="relative w-screen h-screen flex flex-col items-center justify-center">
       <transition name="slide5">
         <div id="card" v-show="cardFullView" ref="cardtake" class="userCard bg-gradient-to-b from-teal-400 to-blue-600  p-8 rounded-3xl">

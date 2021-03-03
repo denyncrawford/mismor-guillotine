@@ -1,5 +1,6 @@
 <template>
   <div class="bg-back min-w-screen min-w-screen min-h-screen p-10 px-16">
+    <user-card ref="userCard"/>
     <div class="p-5 border border-gray-800 rounded-xl">
       <div class="flex p-5 inline bg-gray-900 rounded-xl">
         <div :style="[user?.file ? { background: `url(${image})` } : {background : 'blue'}]" class="userimage bg-center bg-cover bg-no-repeat w-44 h-44 bg-indigo-800 rounded-full"></div>
@@ -13,7 +14,7 @@
               <h2 class="mb-2 mt-2 text-sm text-white"><span class="font-bold text-gray-400">DNI:</span> {{user.dni}}</h2>
               <h2 class="mb-2 mt-2 text-sm text-white"><span class="font-bold text-gray-400">Usuario:</span> {{user.username}}</h2>
               <h2 class="mb-2 mt-2 text-sm text-white"><span class="font-bold text-gray-400">ID:</span> {{user.id}}</h2>
-              <div class="-ml-2">
+              <div class="-ml-2 z-0">
                 <svg id="barcode"></svg>
               </div>
             </div>
@@ -22,6 +23,7 @@
           <h2 @click="see = !see" v-show="see" class="mt-2 text-xs mb-2 font-bold text-main-color cursor-pointer">VER MENOS</h2>
         </div>
         <div class="ml-auto">
+          <button @click="openCard" class="mr-5 cursor-pointer p-2 rounded-full ml-auto text-main-color hover:bg-main-color hover:border-main-color hover:text-back" type="primary"><i data-feather="credit-card" class="w-5 h-5"></i></button>
           <button @click="editUser($route.params.id)" class="mr-5 cursor-pointer p-2 rounded-full ml-auto text-main-color hover:bg-main-color hover:border-main-color hover:text-back" type="primary"><i data-feather="edit" class="w-5 h-5"></i></button>
           <button @click="$router.go(-1)" class="cursor-pointer p-2 rounded-full ml-auto text-main-color hover:bg-main-color hover:border-main-color hover:text-back" type="primary"><i data-feather="x" class="w-5 h-5"></i></button>
         </div>
@@ -39,6 +41,7 @@ import Page from '../../components/structure/Page.vue'
 import { connect } from '../../store/index.js'
 import dayjs from 'dayjs';
 import { replace, icons as fIcons } from 'feather-icons'
+import UserCard from '../../components/UserCard.vue'
 
 export default {
   data() {
@@ -85,10 +88,17 @@ export default {
   methods: {
     editUser(id) {
       this.$router.push(`/editUser/${id}`)
-    }
+    },
+    openCard() {
+      this.$store.commit("selectUser", this.user);
+      this.$store.commit("toggleFullViewStatus");
+      this.$emit('setCode', this.user.id);
+      this.$refs.userCard.setCode(this.user.id);
+    },
   },
   components: {
-    Page
+    Page,
+    UserCard
   }
 }
 </script>
