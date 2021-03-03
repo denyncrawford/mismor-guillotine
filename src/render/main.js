@@ -7,6 +7,7 @@ import locale from 'element-plus/lib/locale/lang/es'
 import './assets/styles/index.css'
 import 'animate.css/animate.min.css'
 import './index.css'
+import VCalendar from 'v-calendar';
 
 import router from './router'
 import { store } from './store'
@@ -16,4 +17,5 @@ const app = createApp(App)
 app.use(router)
 app.use(store)
 app.use(ElementUI, { locale })
+app.use(VCalendar)
 app.mount('#app')

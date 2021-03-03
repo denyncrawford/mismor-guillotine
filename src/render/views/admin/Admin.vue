@@ -34,7 +34,7 @@
         <div class="rounded-lg border overflow-hidden border-gray-400">
           <div class="items-center border-b border-gray-400 flex px-5 py-2">
             <h1 class="text-md text-white">Base de datos</h1>
-            <input @keydown="searchUsers" @keyup="searchUsers" v-model="users.search" type="text" placeholder="Buscar usuario" class="ml-auto ml-5 text-sm text-white py-1 px-5 bg-transparent rounded-full border outline-none border-1 border-gray-400">
+            <input @keydown="searchUsers" @keyup="searchUsers" v-model="users.search" type="text" placeholder="Buscar usuario" class="ml-auto ml-5 text-sm text-white py-1 px-5 bg-transparent rounded border outline-none border-1 border-gray-400">
           </div>
           <table class="w-full">
             <thead class="px-5 py-2">
@@ -81,6 +81,20 @@
     </div>
     <div class="mb-5">
       <h1 class="text-lg text-white mb-5">Turnos</h1>
+      <div class="rounded-lg border overflow-hidden border-gray-400">
+        <div class="flex px-5 py-2 items-center">
+          <h1 class="text-md text-white mr-10">Seleccionar fecha:</h1>
+          <v-date-picker is-dark v-model="mainCalendar.date" mode="date">
+            <template v-slot="{ inputValue, inputEvents }">
+              <input
+                class="px-2 text-sm text-white py-1 border border-gray-400 bg-back rounded focus:outline-none focus:border-blue-300"
+                :value="inputValue"
+                v-on="inputEvents"
+              />
+            </template>
+          </v-date-picker>
+        </div>
+      </div>
     </div>
   </page>
 </template>
@@ -108,6 +122,9 @@ export default {
         edit: fIcons.edit.toSvg({width: 14}),
         eye: fIcons.eye.toSvg({width: 14}),
         trash: fIcons.trash.toSvg({width: 14})
+      },
+      mainCalendar: {
+        date: new Date(),
       }
     }
   },

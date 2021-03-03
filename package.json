@@ -68,6 +68,7 @@
     "shortid": "^2.2.16",
     "simple-barcode-scanner": "git+https://github.com/denyncrawford/simple-barcode-scanner.git#device-instance",
     "tailwindcss": "compat",
+    "v-calendar": "^3.0.0-alpha.3",
     "vue": "^3.0.2",
     "vue-router": "^4.0.0-rc.6",
     "vuex": "^4.0.0-rc.2"
