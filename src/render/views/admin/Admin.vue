@@ -34,7 +34,7 @@
         <div class="rounded-lg border overflow-hidden border-gray-400">
           <div class="items-center flex px-5 py-2">
             <h1 class="text-md text-white">Base de datos</h1>
-            <input @keydown="searchUsers" @keyup="searchUsers" v-model="users.search" type="text" placeholder="Buscar usuario" class="ml-auto ml-5 text-sm text-white py-1 px-5 bg-transparent rounded border outline-none border-1 border-gray-400">
+            <input @keydown="searchUsers" @keyup="searchUsers" v-model="users.search" type="text" placeholder="Buscar usuario" class="ml-auto ml-5 text-sm text-white py-1 hover:bg-gray-800 focus:bg-gray-800 px-5 bg-gray-900 rounded outline-none">
           </div>
           <table class="w-full">
             <thead class="px-5 py-2">
@@ -62,6 +62,9 @@
               </tr>
             </tbody>
           </table>
+          <div v-show="!users.entries.length" class="w-full flex justify-center py-3">
+            <h1 class="text-gray-400 text-xs uppercase">No hay resultados</h1>
+          </div>
         </div>
         <div class="flex items-center">
           <h3 class="text-md text-gray-400 mt-5 mb-5">Mostrando {{ users.entries.length }} de {{ users.total }} colaboradores.</h3>
@@ -108,8 +111,8 @@
             <tbody>
             </tbody>
           </table>
-          <div v-show="!innings.entries.length" class="w-full flex justify-center py-2">
-            <h1 class="text-gray-400 text-xs uppercase">No hay nada aún</h1>
+          <div v-show="!innings.entries.length" class="w-full flex justify-center py-3">
+            <h1 class="text-gray-400 text-xs uppercase">No hay resultados</h1>
           </div>
         </div>
       </div>
@@ -200,7 +203,7 @@ export default {
       this.users.pages = Math.round(this.users.total / 10)
     },
     onDayClick(day) {
-      console.log(day)
+      console.log(this.innings.date)
     }
   }
 }
