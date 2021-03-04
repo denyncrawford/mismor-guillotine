@@ -58,21 +58,22 @@ export default {
       this.$router.go(-1)
     },
     async save() {
-      let { selectedDevice, database } = this;
-      database = database || this.defaultDatabase;
-      const db = await connect(database);
-      const users = db.collection("users")
+      let { selectedDevice, database, host } = this;
       this.isLoading = true;
       let inMemory = this.$store.state.firstLoad;
       inMemory.savedSession.admin = true;
       const config = {
         selectedDevice, 
-        database, 
+        database,
+        host,
         ...inMemory
       };
       this.$store.commit('setConfig', config);
       await state.set({config});
       this.$store.commit('updateFirtsLoad', {});
+      database = database || this.defaultDatabase;
+      const db = await connect(database);
+      const users = db.collection("users")
       await users.insertOne(inMemory.savedSession)
       setTimeout(() => {
         this.$router.push('/mode')

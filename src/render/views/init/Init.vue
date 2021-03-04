@@ -69,12 +69,12 @@ export default {
       this.$store.commit("updateFirtsLoad", { savedSession: { password, username, email, id } })
       router.push('/configure')
     },
-    notify({title, message}) {
-      this.$notify.error({
-          title,
-          message,
-          position: 'bottom-right'
-        });
+    notify({
+      title,
+      message
+    }) {
+      message = `${title}: ${message}`
+      this.$message.error({message, showClose: true});
     },
   }
 }

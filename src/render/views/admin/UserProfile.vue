@@ -31,6 +31,38 @@
     </div>
     <div class=" mt-8 mb-5">
       <h1 class="text-lg text-white mb-5">Turnos</h1>
+      <div class="rounded-lg border overflow-hidden border-gray-400">
+        <div class="flex px-5 py-2 items-center">
+          <h1 class="text-md text-white mr-10">Seleccionar fecha:</h1>
+          <v-date-picker is-dark v-model="innings.date" mode="date">
+            <template v-slot="{ inputValue, inputEvents }">
+              <input
+                class="px-2 text-sm text-white py-1 border border-gray-400 bg-back rounded focus:outline-none focus:border-blue-300"
+                :value="inputValue"
+                v-on="inputEvents"
+              />
+            </template>
+          </v-date-picker>
+        </div>
+        <div>
+          <table class="w-full">
+            <thead class="px-5 py-2">
+              <tr class="px-5 py-2 border-b border-gray-400">
+                <th class="py-2 text-xs px-5">Colaborador</th>
+                <th class="py-2 text-xs px-5">ID</th>
+                <th class="py-2 text-xs px-5">Fecha</th>
+                <th class="py-2 text-xs px-5">Estatus</th>
+                <th class="py-2 text-xs px-5">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+          <div v-show="!innings.entries.length" class="w-full flex justify-center py-2">
+            <h1 class="text-gray-400 text-xs uppercase">No hay nada aún</h1>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -59,7 +91,11 @@ export default {
         password: "",
         username: ""
       },
-      see: false
+      see: false,
+      innings: {
+        date: new Date(),
+        entries: []
+      }
     }
   },
   computed: {
@@ -118,5 +154,12 @@ export default {
   background-repeat: no-repeat!important;
   background-size: cover!important;
   background-position: center!important;
+}
+
+* th {
+  text-transform: uppercase;
+  text-align: left;
+  color: #FFF;
+  min-width: 30px;
 }
 </style>

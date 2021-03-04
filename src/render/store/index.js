@@ -2,17 +2,6 @@
 import { createStore } from 'vuex'
 const { MongoClient } = require('mongodb');
 const Store = require('electron-store')
-const url = 'mongodb://127.0.0.1:27017';
-
-let database;
-
-const connect = async (databaseName) => {
-  if (database) return database;
-  const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
-  const connection = await client.connect();
-  database = connection.db(databaseName)
-  return database;
-} 
 
 const store = createStore({
   state() {
@@ -48,6 +37,16 @@ const store = createStore({
 })
 
 const persistentSotrage = new Store();
+
+let database;
+
+const connect = async (databaseName) => {
+  if (database) return database;
+  const client = new MongoClient(store.state.config?.host, { useNewUrlParser: true, useUnifiedTopology: true });
+  const connection = await client.connect();
+  database = connection.db(databaseName)
+  return database;
+} 
 
 export { 
   store,

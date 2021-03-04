@@ -32,7 +32,7 @@
       <h1 class="text-lg text-white mb-5">Colaboradores</h1>
       <div>
         <div class="rounded-lg border overflow-hidden border-gray-400">
-          <div class="items-center border-b border-gray-400 flex px-5 py-2">
+          <div class="items-center flex px-5 py-2">
             <h1 class="text-md text-white">Base de datos</h1>
             <input @keydown="searchUsers" @keyup="searchUsers" v-model="users.search" type="text" placeholder="Buscar usuario" class="ml-auto ml-5 text-sm text-white py-1 px-5 bg-transparent rounded border outline-none border-1 border-gray-400">
           </div>
@@ -48,7 +48,7 @@
             </thead>
             <tbody>
               <tr @dblclick="openCard(index)" v-for="(user, index) in users.entries" :key="user._id" class="cursor-pointer group hover:bg-main-color px-5 py-2 border-b last:border-b-0 border-gray-400">
-                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.username || user.fullName}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.fullName || user.username}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.id || user._id.toString()}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.email}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{user.admin ? "admin" : user.position}}</th>
@@ -84,7 +84,7 @@
       <div class="rounded-lg border overflow-hidden border-gray-400">
         <div class="flex px-5 py-2 items-center">
           <h1 class="text-md text-white mr-10">Seleccionar fecha:</h1>
-          <v-date-picker is-dark v-model="mainCalendar.date" mode="date">
+          <v-date-picker @dayclick="onDayClick" is-dark v-model="innings.date" mode="date">
             <template v-slot="{ inputValue, inputEvents }">
               <input
                 class="px-2 text-sm text-white py-1 border border-gray-400 bg-back rounded focus:outline-none focus:border-blue-300"
@@ -93,6 +93,24 @@
               />
             </template>
           </v-date-picker>
+        </div>
+        <div>
+          <table class="w-full">
+            <thead class="px-5 py-2">
+              <tr class="px-5 py-2 border-b border-gray-400">
+                <th class="py-2 text-xs px-5">Colaborador</th>
+                <th class="py-2 text-xs px-5">ID</th>
+                <th class="py-2 text-xs px-5">Fecha</th>
+                <th class="py-2 text-xs px-5">Estatus</th>
+                <th class="py-2 text-xs px-5">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+          <div v-show="!innings.entries.length" class="w-full flex justify-center py-2">
+            <h1 class="text-gray-400 text-xs uppercase">No hay nada aún</h1>
+          </div>
         </div>
       </div>
     </div>
@@ -123,8 +141,9 @@ export default {
         eye: fIcons.eye.toSvg({width: 14}),
         trash: fIcons.trash.toSvg({width: 14})
       },
-      mainCalendar: {
+      innings: {
         date: new Date(),
+        entries: []
       }
     }
   },
@@ -179,6 +198,9 @@ export default {
         ]
       }) : await this.users.collection.count();
       this.users.pages = Math.round(this.users.total / 10)
+    },
+    onDayClick(day) {
+      console.log(day)
     }
   }
 }
