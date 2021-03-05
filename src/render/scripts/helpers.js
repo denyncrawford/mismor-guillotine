@@ -7,17 +7,20 @@ const formatUser = (data) => {
   return data
 }
 
-const handleInning = (inning) => {
+const handleInning = (owner, inning) => {
   if (!inning) return {
+    owner,
     date: {
       day: dayjs().format('DD'),
       month: dayjs().format('MM'),
       year: dayjs().format('YYYY'),
     },
+    dateString: dayjs().format('DD/MM/YYYY') ,
     start: dayjs().format('hh:mm:ss'),
     end: null,
     state: true,
-    details: ''
+    details: '',
+    id: shortid.generate()
   }
   inning.end = dayjs().format('hh:mm:ss');
   inning.state = false;

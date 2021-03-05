@@ -109,6 +109,19 @@
               </tr>
             </thead>
             <tbody>
+              <tr v-for="(inning, i) in innings.entries" :key="i"  class="cursor-pointer group hover:bg-main-color px-5 py-2 border-b last:border-b-0 border-gray-400">
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{ inning.owner.fullName}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.id}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.dateString}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.state ? "Abierto" : "Cerrado" }}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">
+                  <div class="flex">
+                    <button class="rounded-full px-2 mr-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.edit"></button>
+                    <button class="rounded-full px-2 mr-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.eye"></button>
+                    <button class="rounded-full px-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.trash"></button>
+                  </div>
+                </th>
+              </tr>
             </tbody>
           </table>
           <div v-show="!innings.entries.length" class="w-full flex justify-center py-3">
@@ -126,6 +139,7 @@ import UserCard from '../../components/UserCard.vue'
 import { connect } from '../../store/index.js'
 import { replace, icons as fIcons } from 'feather-icons'
 import { mapState } from 'vuex';
+import dayjs from 'dayjs';
 export default {
   data() {
     return {
@@ -161,13 +175,18 @@ export default {
     this.users.total = await this.users.collection.count()
     this.users.pages = Math.round(this.users.total / 10)
     this.users.entries = await this.users.collection.find(this.users.page * this.users.limit).limit(this.users.limit).toArray();
+    this.innings.entries = await this.searchInnings(dayjs(this.innings.date).format('DD/MM/YYYY'));
+    this.innings.entries = this.innings.entries[0].innings
     replace();
   },
   updated() {
     replace();
   },
   computed: {
-    ...mapState(['cardFullView'])
+    ...mapState(['cardFullView']),
+    inningStatus(value) {
+      return value ? "Abierto" : "Cerrado"
+    }
   },
   methods: {
     newUser() {
@@ -202,8 +221,23 @@ export default {
       }) : await this.users.collection.count();
       this.users.pages = Math.round(this.users.total / 10)
     },
-    onDayClick(day) {
-      console.log(this.innings.date)
+    async searchInnings (date) {
+      return await this.users.collection.aggregate([
+        { $match: { 'innings.dateString': date }},
+        { $project: {
+            innings: { $filter: {
+                input: '$innings',
+                as: 'innings',
+                cond: { $eq: ['$$innings.dateString', date]}
+            }},
+            _id: 0
+        }}
+      ]).toArray();
+    },
+    async onDayClick(day) {
+      this.innings.entries = await this.searchInnings(dayjs(this.innings.date).format('DD/MM/YYYY'));
+      this.innings.entries = this.innings.entries[0].innings
+      console.log(this.innings.entries);
     }
   }
 }

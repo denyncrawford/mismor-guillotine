@@ -18,23 +18,34 @@
 import Page from '../components/structure/PageCenter.vue'
 import Inpt from '../components/structure/Input.vue'
 const BarcodeScanner = require("native-barcode-scanner");
+import { connect } from '../store/index.js'
+import { handleInning } from '../scripts/helpers.js'
 import dayjs from 'dayjs';
 let scanner;
 export default {
   data() {
     return {
       code: "",
-      date: dayjs().format('hh:mm')
+      date: dayjs().format('hh:mm'),
+      collection: null
     }
   },
   methods: {
     back() {
       this.$router.go(-1)
     },
-    marcar(code) {
+    async marcar(code) {
       code = !code || typeof code !== 'string' ? this.code : code;
-      if (!code) this.notify({ message: "Por favor introduzca un usuario valido." });
-      
+      if (!code) return this.notify({ message: "Por favor introduzca un usuario valido." });
+      const user = await this.collection.findOne({id: code})
+      if (!user) return this.notify({ message: "Por favor introduzca un usuario valido." });
+      const { innings, id, fullName } = user;
+      let inning = innings.find(t => t.dateString == dayjs().format('DD/MM/YYYY'))
+      if (!inning) {
+        await this.collection.updateOne({id}, { $push: { innings: handleInning({fullName, id}) } })
+        return this.notify({ message: "Turno argregado con exito." });
+      }
+      if (inning && !inning?.state) return this.notify({ message: "No puede iniciar otro turno hoy." });
     },
     notify({
       title,
@@ -43,7 +54,10 @@ export default {
       this.$message.error({message, showClose: true});
     },
   },
-  mounted() {
+  async mounted() {
+    const database = this.$store.state.config.database;
+    const db = await connect(database);
+    this.collection = db.collection('users');
     scanner = new BarcodeScanner({
       endKey: 'Intro'
     });
