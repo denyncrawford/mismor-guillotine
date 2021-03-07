@@ -62,6 +62,7 @@ export default {
       this.isLoading = true;
       let inMemory = this.$store.state.firstLoad;
       inMemory.savedSession.admin = true;
+      database = database || this.defaultDatabase;
       const config = {
         selectedDevice, 
         database,
@@ -71,7 +72,6 @@ export default {
       this.$store.commit('setConfig', config);
       await state.set({config});
       this.$store.commit('updateFirtsLoad', {});
-      database = database || this.defaultDatabase;
       const db = await connect(database);
       const users = db.collection("users")
       await users.insertOne(inMemory.savedSession)

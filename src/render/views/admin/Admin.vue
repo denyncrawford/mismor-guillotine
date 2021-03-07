@@ -104,21 +104,23 @@
                 <th class="py-2 text-xs px-5">Colaborador</th>
                 <th class="py-2 text-xs px-5">ID</th>
                 <th class="py-2 text-xs px-5">Fecha</th>
+                <th class="py-2 text-xs px-5">Entrada</th>
+                <th class="py-2 text-xs px-5">Salida</th>
                 <th class="py-2 text-xs px-5">Estatus</th>
-                <th class="py-2 text-xs px-5">Acciones</th>
+                <th class="py-2 text-xs px-5">Ver</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(inning, i) in innings.entries" :key="i"  class="cursor-pointer group hover:bg-main-color px-5 py-2 border-b last:border-b-0 border-gray-400">
-                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{ inning.owner.fullName}}</th>
+              <tr @dblclick="openInning(inning.id)" v-for="inning in innings.entries" :key="inning.id"  class="cursor-pointer group hover:bg-main-color px-5 py-2 border-b last:border-b-0 border-gray-400">
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.owner.fullName}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.id}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.dateString}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.start}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.end || '-'}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.state ? "Abierto" : "Cerrado" }}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">
                   <div class="flex">
-                    <button class="rounded-full px-2 mr-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.edit"></button>
-                    <button class="rounded-full px-2 mr-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.eye"></button>
-                    <button class="rounded-full px-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.trash"></button>
+                    <button @click="openInning(inning.id)" class="rounded-full px-2 mr-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.eye"></button>
                   </div>
                 </th>
               </tr>
@@ -175,8 +177,8 @@ export default {
     this.users.total = await this.users.collection.count()
     this.users.pages = Math.round(this.users.total / 10)
     this.users.entries = await this.users.collection.find(this.users.page * this.users.limit).limit(this.users.limit).toArray();
-    this.innings.entries = await this.searchInnings(dayjs(this.innings.date).format('DD/MM/YYYY'));
-    this.innings.entries = this.innings.entries[0].innings
+    const result  = await this.searchInnings(dayjs(this.innings.date).format('DD/MM/YYYY'));
+    this.innings.entries = result.map(e => e.innings.map(l => l)).flat()
     replace();
   },
   updated() {
@@ -203,6 +205,9 @@ export default {
     },
     openUser(id) {
       this.$router.push(`/profile/${id}`)
+    },
+    openInning(id) {
+      this.$router.push(`/inning/${id}`)
     },
     async searchUsers() {
       this.users.entries = this.users.search.length ? this.users.entries = await this.users.collection.find({
@@ -235,9 +240,8 @@ export default {
       ]).toArray();
     },
     async onDayClick(day) {
-      this.innings.entries = await this.searchInnings(dayjs(this.innings.date).format('DD/MM/YYYY'));
-      this.innings.entries = this.innings.entries[0].innings
-      console.log(this.innings.entries);
+      const result = await this.searchInnings(dayjs(this.innings.date).format('DD/MM/YYYY'));
+      this.innings.entries = result.map(e => e.innings.map(l => l)).flat()
     }
   }
 }

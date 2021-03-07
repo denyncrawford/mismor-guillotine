@@ -8,15 +8,7 @@ const router = createRouter({
         name: 'scan',
         component: () => import('./views/Index.vue'),
         meta: {
-            title: 'Home'
-        }
-    },
-    {
-        path: '/create',
-        name: 'create',
-        component: () => import('./views/Create.vue'),
-        meta: {
-            title: 'Create'
+            title: 'Marcar turno'
         }
     },
     {
@@ -105,6 +97,14 @@ const router = createRouter({
       component: () => import('./views/admin/UserProfile.vue'),
       meta: {
           title: 'Perfil de usuario'
+      }
+    },
+    {
+      path: '/inning/:id',
+      name: 'inning',
+      component: () => import('./views/admin/InningView.vue'),
+      meta: {
+          title: 'Vista de turno'
       }
     },
   ]

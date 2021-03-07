@@ -96,7 +96,7 @@ export default {
     },
   }
 }
-</script>>
+</script>
 
 <style scoped>
 .slide5-enter-active {
@@ -118,8 +118,4 @@ export default {
   background: rgb(0,73,255);
   background: linear-gradient(to top, rgba(0,73,255,1) 0%, rgba(6,182,218,1) 100%);
 }
-</style>
-
-<style scoped>
-  
 </style>

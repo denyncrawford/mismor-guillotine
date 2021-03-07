@@ -1,5 +1,10 @@
 import shortid from 'shortid'
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration.js'
+import customParseFormat from 'dayjs/plugin/customParseFormat.js'
+
+dayjs.extend(duration)
+dayjs.extend(customParseFormat)
 
 const formatUser = (data) => {
   if (data.name && data.lastName) data.fullName = data.name + " " + data.lastName
@@ -16,13 +21,17 @@ const handleInning = (owner, inning) => {
       year: dayjs().format('YYYY'),
     },
     dateString: dayjs().format('DD/MM/YYYY') ,
-    start: dayjs().format('hh:mm:ss'),
+    start: dayjs().format('hh:mm:ss A'),
     end: null,
+    totalTime: 0,
     state: true,
     details: '',
     id: shortid.generate()
   }
-  inning.end = dayjs().format('hh:mm:ss');
+  inning.end = dayjs().format('hh:mm:ss A');
+  const date1 = dayjs(inning.start, 'hh:mm:ss A')
+  const date2 = dayjs(inning.end, 'hh:mm:ss A')
+  inning.totalTime = Math.abs(date1.diff(date2, 'hours', true)).toFixed(2);
   inning.state = false;
   return inning;
 }

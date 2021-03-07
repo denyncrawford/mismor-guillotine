@@ -35,7 +35,9 @@ const config: UserConfig = {
       'pdf-to-printer'
     ],
     include: [
-      'element-plus/lib/locale/lang/es'
+      'element-plus/lib/locale/lang/es',
+      'dayjs/plugin/duration.js',
+      'dayjs/plugin/customParseFormat.js'
     ]
   },
   cssPreprocessOptions: {
