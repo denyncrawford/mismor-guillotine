@@ -22,28 +22,10 @@ module.exports = {
     tailwindcss,
     autoprefixer,
     ...process.env.NODE_ENV === 'production'
-    ? [purgecss]
+    ? []
     : [],
     fontMagician({
-      variants: {
-          'Fira Mono': {
-            '400': [],
-            '500': [],
-            '700': []
-          },
-          'Inter': {
-            '100': [],
-            '200': [],
-            '300': [],
-            '400': [],
-            '500': [],
-            '600': [],
-            '700': [],
-            '800': [],
-            '900': [],
-          }
-      },
-      foundries: ['google']
-  })
+      hosted: ['./src/render/assets/fonts']
+    })
   ],
 };
