@@ -13,11 +13,12 @@
           Nuevo Colaborador
         </el-button>
         <el-button 
+          @click="saveCSV(true)"
           round 
           size="mini" 
           class="bg-back inline text-red hover:bg-main-color group flex items-center justify-center hover:border-main-color hover:text-back">
-            <i data-feather="calendar" class="w-5 mr-2 inline text-sm group-hover:text-back text-gray-400"></i>
-            Filtrar por fechas
+            <i data-feather="download" class="w-5 mr-2 inline text-sm group-hover:text-back text-gray-400"></i>
+            Turnos del mes a excel
         </el-button>
         <el-button 
           round 
@@ -33,7 +34,7 @@
       <div>
         <div class="rounded-lg border overflow-hidden border-gray-400">
           <div class="items-center flex px-5 py-2">
-            <h1 class="text-md text-white">Base de datos</h1>
+            <h1 class="text-md text-white">Base de datos de colaboradores</h1>
             <input @keydown="searchUsers" @keyup="searchUsers" v-model="users.search" type="text" placeholder="Buscar usuario" class="ml-auto ml-5 text-sm text-white py-1 hover:bg-gray-800 focus:bg-gray-800 px-5 bg-gray-900 rounded outline-none">
           </div>
           <table class="w-full">
@@ -87,6 +88,13 @@
       <div class="rounded-lg border overflow-hidden border-gray-400">
         <div class="flex px-5 py-2 items-center">
           <h1 class="text-md text-white mr-10">Seleccionar fecha:</h1>
+          <el-switch
+            @change="onDayClick"
+            v-model="innings.mode"
+            active-text="Dia"
+            inactive-text="Mes"
+            class="mr-10">
+          </el-switch>
           <v-date-picker @dayclick="onDayClick" is-dark v-model="innings.date" mode="date">
             <template v-slot="{ inputValue, inputEvents }">
               <input
@@ -96,6 +104,12 @@
               />
             </template>
           </v-date-picker>
+          <button 
+          @click="saveCSV"
+            class="rounded text-gray-400 ml-5 py-1 px-2 bg-back inline text-red hover:bg-main-color group flex items-center justify-center hover:border-main-color hover:text-back">
+              <p class="mr-2 text-sm uppercase" >Bajar en excel</p>
+              <i data-feather="download" class="w-5 stroke-current inline text-sm group-hover:text-back"></i>
+          </button>
         </div>
         <div>
           <table class="w-full">
@@ -141,6 +155,11 @@ import UserCard from '../../components/UserCard.vue'
 import { connect } from '../../store/index.js'
 import { replace, icons as fIcons } from 'feather-icons'
 import { mapState } from 'vuex';
+const fs = require('fs')
+const { promisify } = require('util');
+const writeFile = promisify(fs.writeFile);
+const { dialog } = require('electron').remote;
+const { Parser } = require('json2csv')
 import dayjs from 'dayjs';
 export default {
   data() {
@@ -161,6 +180,7 @@ export default {
         trash: fIcons.trash.toSvg({width: 14})
       },
       innings: {
+        mode: true,
         date: new Date(),
         entries: []
       }
@@ -227,13 +247,17 @@ export default {
       this.users.pages = Math.round(this.users.total / 10)
     },
     async searchInnings (date) {
+      let cond = this.innings.mode ? { $eq: ['$$innings.dateString', date]} : { $and: [
+        { $eq: [ "$$innings.date.month", dayjs(date, 'DD/MM/YYYY').format('MM') ] },
+        { $eq: [ "$$innings.date.year", dayjs(date, 'DD/MM/YYYY').format('YYYY') ] }
+      ] }
       return await this.users.collection.aggregate([
         { $match: { 'innings.dateString': date }},
         { $project: {
             innings: { $filter: {
                 input: '$innings',
                 as: 'innings',
-                cond: { $eq: ['$$innings.dateString', date]}
+                cond
             }},
             _id: 0
         }}
@@ -241,7 +265,54 @@ export default {
     },
     async onDayClick(day) {
       const result = await this.searchInnings(dayjs(this.innings.date).format('DD/MM/YYYY'));
-      this.innings.entries = result.map(e => e.innings.map(l => l)).flat()
+      this.innings.entries = result.map(e => e.innings.map(l => l)).flat().sort((a,b) => dayjs(b.dateString, 'DD/MM/YYYY').toDate().valueOf() - dayjs(a.dateString, 'DD/MM/YYYY').toDate().valueOf())
+    },
+    async saveCSV(month) {
+      if (month) {
+        this.innings.mode = false;
+        await this.onDayClick()
+      }
+      const items = this.innings.entries
+      const fields = [
+        {
+          label: 'Fecha',
+          value: 'dateString'
+        },
+        {
+          label: 'Colaborador',
+          value: 'owner.fullName'
+        },
+        {
+          label: 'ID Turno',
+          value: 'id'
+        },
+        {
+          label: 'Entrada',
+          value: 'start'
+        },
+        {
+          label: 'Salida',
+          value: 'end'
+        },
+        {
+          label: 'Duración',
+          value: 'totalTime'
+        },
+        {
+          label: 'Detalles',
+          value: 'details'
+        },
+      ];
+      const parser = new Parser({ fields, delimiter: '\t' });
+      const xls = parser.parse(items)//.replace(/["']/g, "").replace(/[,]/g, "\t")
+      const savePath = await dialog.showSaveDialog({
+          title: "Guardar Turno",
+          defaultPath: `turnos-${dayjs(this.innings.date).format('DD-MM-YYYY')}`,
+          filters: [
+            { name: 'xls  FILES', extensions: ['xls'] },
+          ]
+      });
+      await writeFile(savePath.filePath, xls, 'utf-8')
     }
   }
 }

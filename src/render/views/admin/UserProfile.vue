@@ -34,7 +34,14 @@
       <div class="rounded-lg border overflow-hidden border-gray-400">
         <div class="flex px-5 py-2 items-center">
           <h1 class="text-md text-white mr-10">Seleccionar fecha:</h1>
-          <v-date-picker is-dark v-model="innings.date" mode="date">
+          <el-switch
+            @change="onDayClick"
+            v-model="innings.mode"
+            active-text="Dia"
+            inactive-text="Mes"
+            class="mr-10">
+          </el-switch>
+          <v-date-picker @dayclick="onDayClick" is-dark v-model="innings.date" mode="date">
             <template v-slot="{ inputValue, inputEvents }">
               <input
                 class="px-2 text-sm text-white py-1 border border-gray-400 bg-back rounded focus:outline-none focus:border-blue-300"
@@ -43,23 +50,50 @@
               />
             </template>
           </v-date-picker>
+          <button 
+          @click="saveCSV"
+            class="rounded text-gray-400 ml-5 py-1 px-2 bg-back inline text-red hover:bg-main-color group flex items-center justify-center hover:border-main-color hover:text-back">
+              <p class="mr-2 text-sm uppercase" >Bajar en excel</p>
+              <i data-feather="download" class="w-5 stroke-current inline text-sm group-hover:text-back"></i>
+          </button>
+          <!-- <button 
+          @click="printPDF"
+            class="rounded text-gray-400 ml-5 py-1 px-2 bg-back inline text-red hover:bg-main-color group flex items-center justify-center hover:border-main-color hover:text-back">
+              <p class="mr-2 text-sm uppercase" >Imprimir resumen</p>
+              <i data-feather="printer" class="w-5 stroke-current inline text-sm group-hover:text-back"></i>
+          </button> -->
         </div>
         <div>
-          <table class="w-full">
+          <table ref="table" class="w-full">
             <thead class="px-5 py-2">
               <tr class="px-5 py-2 border-b border-gray-400">
                 <th class="py-2 text-xs px-5">Colaborador</th>
                 <th class="py-2 text-xs px-5">ID</th>
                 <th class="py-2 text-xs px-5">Fecha</th>
+                <th class="py-2 text-xs px-5">Entrada</th>
+                <th class="py-2 text-xs px-5">Salida</th>
                 <th class="py-2 text-xs px-5">Estatus</th>
-                <th class="py-2 text-xs px-5">Acciones</th>
+                <th class="py-2 text-xs px-5">Ver</th>
               </tr>
             </thead>
             <tbody>
+              <tr @dblclick="openInning(inning.id)" v-for="inning in innings.entries" :key="inning.id"  class="cursor-pointer group hover:bg-main-color px-5 py-2 border-b last:border-b-0 border-gray-400">
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.owner.fullName}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.id}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.dateString}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.start}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.end || '-'}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.state ? "Abierto" : "Cerrado" }}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">
+                  <div class="flex">
+                    <button @click="openInning(inning.id)" class="rounded-full px-2 mr-2 text-sm group-hover:text-back text-gray-400 hover:bg-white" v-html="icons.eye"></button>
+                  </div>
+                </th>
+              </tr>
             </tbody>
           </table>
-          <div v-show="!innings.entries.length" class="w-full flex justify-center py-2">
-            <h1 class="text-gray-400 text-xs uppercase">No hay nada aún</h1>
+          <div v-show="!innings.entries.length" class="w-full flex justify-center py-3">
+            <h1 class="text-gray-400 text-xs uppercase">No hay resultados</h1>
           </div>
         </div>
       </div>
@@ -74,6 +108,12 @@ import { connect } from '../../store/index.js'
 import dayjs from 'dayjs';
 import { replace, icons as fIcons } from 'feather-icons'
 import UserCard from '../../components/UserCard.vue'
+const fs = require('fs')
+const { promisify } = require('util');
+const writeFile = promisify(fs.writeFile);
+const { dialog } = require('electron').remote;
+const { Parser } = require('json2csv')
+// const { jsPDF } = require('jspdf');
 
 export default {
   data() {
@@ -91,8 +131,12 @@ export default {
         password: "",
         username: ""
       },
+      icons: {
+        eye: fIcons.eye.toSvg({width: 14}),
+      },
       see: false,
       innings: {
+        mode: true,
         date: new Date(),
         entries: []
       }
@@ -113,6 +157,7 @@ export default {
     this.users = db.collection("users");
     const { id } = this.$route.params;
     this.user = await this.users.findOne({id})
+    await this.onDayClick()
     JsBarcode("#barcode", this.user?.id || 'null', {
         background: "transparent",
         height: 50,
@@ -131,6 +176,100 @@ export default {
       this.$emit('setCode', this.user.id);
       this.$refs.userCard.setCode(this.user.id);
     },
+    async searchInnings (date) {
+      let cond = this.innings.mode ? { $eq: ['$$innings.dateString', date]} : { $and: [
+        { $eq: [ "$$innings.date.month", dayjs(date, 'DD/MM/YYYY').format('MM') ] },
+        { $eq: [ "$$innings.date.year", dayjs(date, 'DD/MM/YYYY').format('YYYY') ] }
+      ] }
+      return await this.users.aggregate([
+        { $match: { id: this.$route.params.id }},
+        { $project: {
+            innings: { $filter: {
+                input: '$innings',
+                as: 'innings',
+                cond
+            }},
+            _id: 0
+        }}
+      ]).toArray();
+    },
+    async onDayClick(day) {
+      const result = await this.searchInnings(dayjs(this.innings.date).format('DD/MM/YYYY'));
+      this.innings.entries = result.map(e => e.innings.map(l => l)).flat().sort((a,b) => dayjs(b.dateString, 'DD/MM/YYYY').toDate().valueOf() - dayjs(a.dateString, 'DD/MM/YYYY').toDate().valueOf())
+    },
+    openInning(id) {
+      this.$router.push(`/inning/${id}`)
+    },
+    async saveCSV(month) {
+      if (month) {
+        this.innings.mode = false;
+        await this.onDayClick()
+      }
+      const items = this.innings.entries
+      const fields = [
+        {
+          label: 'Fecha',
+          value: 'dateString'
+        },
+        {
+          label: 'Colaborador',
+          value: 'owner.fullName'
+        },
+        {
+          label: 'ID Turno',
+          value: 'id'
+        },
+        {
+          label: 'Entrada',
+          value: 'start'
+        },
+        {
+          label: 'Salida',
+          value: 'end'
+        },
+        {
+          label: 'Duración',
+          value: 'totalTime'
+        },
+        {
+          label: 'Detalles',
+          value: 'details'
+        },
+      ];
+      const parser = new Parser({ fields, delimiter: '\t' });
+      const xls = parser.parse(items)//.replace(/["']/g, "").replace(/[,]/g, "\t")
+      const savePath = await dialog.showSaveDialog({
+          title: "Guardar Turno",
+          defaultPath: `turnos-${this.user.name}-${dayjs(this.innings.date).format('DD-MM-YYYY')}`,
+          filters: [
+            { name: 'XLS FILES', extensions: ['xls'] },
+          ]
+      });
+      await writeFile(savePath.filePath, xls, 'utf-8')
+    },
+    // async printPDF() {
+    //   const doc = new jsPDF();
+    //   let lastIndex = 10
+    //   let temp = ""
+    //   this.innings.entries.forEach((inning, i) => {
+    //     temp = ""
+    //     Object.keys(inning).forEach((field, j) => {
+    //       temp += `${field}: ${inning[field]} - `
+    //     })
+    //     doc.text(10, lastIndex, temp)
+    //     lastIndex += 10
+    //   });
+    //   const savePath = await dialog.showSaveDialog({
+    //       title: "resumen",
+    //       defaultPath: this.user.id,
+    //       filters: [
+    //         { name: 'PDF Files', extensions: ['pdf'] },
+    //       ]
+    //   });
+    //   await doc.save(savePath.filePath, {
+    //     returnPromise: true
+    //   });
+    // }
   },
   components: {
     Page,

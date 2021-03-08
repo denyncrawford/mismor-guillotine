@@ -59,6 +59,7 @@
     "fs-extra": "^8.1.0",
     "html2canvas": "^1.0.0-rc.7",
     "jsbarcode": "^3.11.3",
+    "json2csv": "^5.0.6",
     "jspdf": "^2.2.0",
     "mongodb": "^3.6.3",
     "native-barcode-scanner": "^1.2.0",

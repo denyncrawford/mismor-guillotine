@@ -32,7 +32,9 @@ const config: UserConfig = {
       'jspdf',
       'node-hid',
       'native-barcode-scanner',
-      'pdf-to-printer'
+      'pdf-to-printer',
+      'fs',
+      'json2csv'
     ],
     include: [
       'element-plus/lib/locale/lang/es',

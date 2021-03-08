@@ -90,7 +90,9 @@ export default {
       });
       const pdf = new jsPDF();
       pdf.addImage(base64Data, 'png', 10, 10, 64, 113)
-      pdf.save(savePath.filePath);
+      await pdf.save(savePath.filePath, {
+        returnPromise: true
+      });
       await new Promise(resolve => setTimeout(resolve, 2000));
       await ptp.print(savePath.filePath)
     },
