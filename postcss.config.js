@@ -1,6 +1,7 @@
 const autoprefixer = require('autoprefixer');
 const tailwindcss = require('tailwindcss');
 const postcssPurgecss = require(`@fullhuman/postcss-purgecss`);
+const fontMagician = require('postcss-font-magician');
 
 const purgecss = postcssPurgecss({
   // Specify the paths to all of the template files in your project.
@@ -23,5 +24,26 @@ module.exports = {
     ...process.env.NODE_ENV === 'production'
     ? [purgecss]
     : [],
+    fontMagician({
+      variants: {
+          'Fira Mono': {
+            '400': [],
+            '500': [],
+            '700': []
+          },
+          'Inter': {
+            '100': [],
+            '200': [],
+            '300': [],
+            '400': [],
+            '500': [],
+            '600': [],
+            '700': [],
+            '800': [],
+            '900': [],
+          }
+      },
+      foundries: ['google']
+  })
   ],
 };

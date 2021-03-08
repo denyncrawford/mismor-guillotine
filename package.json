@@ -89,6 +89,7 @@
     "electron-rebuild": "^2.3.4",
     "minimist": "^1.2.5",
     "ora": "^5.0.0",
+    "postcss-font-magician": "^3.0.0",
     "rollup-plugin-esbuild": "^2.4.2",
     "sass": "^1.26.10",
     "typescript": "^3.9.7",
