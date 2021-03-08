@@ -15,7 +15,7 @@
 
 <script>
 import Page from '../components/structure/PageCenter.vue'
-import { persistentSotrage as state, connect } from '../../store/index.js'
+import { persistentSotrage as state, connect } from '../store/index.js'
 const BarcodeScanner = require("native-barcode-scanner");
 let scanner;
 export default {
