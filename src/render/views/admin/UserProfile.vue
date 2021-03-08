@@ -8,7 +8,7 @@
           <h2 class="mt-2 mb-4 text-3xl max-w-lg text-main-color uppercase font-thin">{{user.fullName}}</h2>
           <h2 class="inline mb-2 bg-main-color px-2 rounded">{{user.position}}</h2>
           <h2 class="mb-2 mt-2 text-sm text-white"><span class="font-bold text-gray-400">Fecha de entrada:</span> {{date}}</h2>
-          <h2 class="mb-2 mt-2 text-sm text-white"><span class="font-bold text-gray-400">Telefono:</span>: {{user.phone}}</h2>
+          <h2 class="mb-2 mt-2 text-sm text-white"><span class="font-bold text-gray-400">Telefono:</span> {{user.phone}}</h2>
           <transition name="slide3">
             <div class="mb-5" v-show="see">
               <h2 class="mb-2 mt-2 text-sm text-white"><span class="font-bold text-gray-400">DNI:</span> {{user.dni}}</h2>

@@ -66,8 +66,12 @@ export default {
       endKey: 'Intro'
     });
     scanner.on('code', code => {
+      console.log(code)
       this.go(code);
     });
+  },
+  beforeUnmount() {
+    scanner.off();
   },
   components: {
     Page,

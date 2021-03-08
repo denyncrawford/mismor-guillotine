@@ -26,11 +26,14 @@
               <h1 class="text-xs">{{ user?.id }}</h1>
             </div>
             <div :class="[!type ? 'bg-red-600': 'bg-main-color']" class="mt-5 py-1 px-2 rounded uppercase">
-              <h1 class="font-bold">{{ type ? 'Entrada' : 'Salida' }}: {{ time }}</h1>
+              <h1 v-show="!deny" class="font-bold">{{ type ? 'Entrada' : 'Salida' }}: {{ time }}</h1>
+              <h1 v-show="deny" class="font-bold">No puede iniciar otro turno hoy.</h1>
             </div>
-            <div :class="[!type ? 'bg-red-600': 'bg-main-color']" class="rounded-full mt-5 p-2">
-              <i v-show="type" class="text-white stroke-current" data-feather="check"></i>
-              <i v-show="!type" class="text-white stroke-current" data-feather="x"></i>
+            <div v-show="!deny" :class="[!type ? 'bg-red-600': 'bg-main-color']" class="rounded-full mt-5 p-2">
+              <i class="text-white stroke-current" data-feather="check"></i>
+            </div>
+            <div v-show="deny" :class="[!type ? 'bg-red-600': 'bg-main-color']" class="rounded-full mt-5 p-2">
+              <i class="text-white stroke-current" data-feather="x"></i>
             </div>
           </div>
         </div>
@@ -48,23 +51,25 @@ export default {
       user: {},
       timeout: null,
       type: true,
-      time: ''
+      time: '',
+      deny: false
     };
   },
   mounted() {
     replace()
   },
   methods: {
-    show(user, type) {
+    show(user, type, deny) {
       clearTimeout(this.timeout)
-      this.type = type;
+      this.type = typeof type === 'undefined' ? true : type;
       this.user = user;
+      this.deny = typeof deny === 'undefined' ? false : deny;
       this.time = dayjs(new Date()).format('hh:mm:ss A')
       this.visible = true;
       this.timeout = setTimeout(() => {
         this.$refs.cardtake.classList.remove('slideup-enter-active');
         this.$refs.cardtake.classList.add('slideup-leave-active');
-        setTimeout(() => this.visible = false, 400)
+        setTimeout(() => this.visible = false, 290)
       }, 3000)
     },
   },

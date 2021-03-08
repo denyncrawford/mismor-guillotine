@@ -13,7 +13,7 @@
           Nuevo Colaborador
         </el-button>
         <el-button 
-          @click="saveCSV(true)"
+          @click="saveCSV({month: true})"
           round 
           size="mini" 
           class="bg-back inline text-red hover:bg-main-color group flex items-center justify-center hover:border-main-color hover:text-back">
@@ -267,7 +267,7 @@ export default {
       const result = await this.searchInnings(dayjs(this.innings.date).format('DD/MM/YYYY'));
       this.innings.entries = result.map(e => e.innings.map(l => l)).flat().sort((a,b) => dayjs(b.dateString, 'DD/MM/YYYY').toDate().valueOf() - dayjs(a.dateString, 'DD/MM/YYYY').toDate().valueOf())
     },
-    async saveCSV(month) {
+    async saveCSV({month}) {
       if (month) {
         this.innings.mode = false;
         await this.onDayClick()

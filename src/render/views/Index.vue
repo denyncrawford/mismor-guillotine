@@ -50,7 +50,10 @@ export default {
         await this.collection.updateOne({id}, { $push: { innings: handleInning({fullName, id}) } })
         return this.$refs.mark.show(user, true)
       }
-      if (inning && !inning?.state) return this.notify({ message: "No puede iniciar otro turno hoy." });
+      if (inning && !inning?.state) {
+        // return this.notify({ message: "No puede iniciar otro turno hoy." });
+        return this.$refs.mark.show(user, false, true)
+      }
       await this.collection.updateOne({'innings.id':inning?.id}, { $set: { 'innings.$': handleInning(null, inning) } })
       return this.$refs.mark.show(user, false)
     },

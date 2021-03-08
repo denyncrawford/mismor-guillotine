@@ -75,6 +75,7 @@ export default {
     },
     async print() {
       const node = this.$refs.cardtake;
+      console.log(node.offsetWidth, node.offsetHeight)
       let canvas = await toCanvas(node, {
         pixelRatio: 3
       });
