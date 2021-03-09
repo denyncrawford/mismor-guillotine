@@ -5,6 +5,7 @@
 import { join } from 'path'
 import { UserConfig } from 'vite'
 import dotenv from 'dotenv'
+import ViteFonts from 'vite-plugin-fonts'
 
 dotenv.config({ path: join(__dirname, '.env') })
 const root = join(__dirname, 'src/render')
@@ -52,7 +53,14 @@ const config: UserConfig = {
         '$custom-danger-color': '#ee3300',
       }
     }
-  }
+  },
+  plugins: [
+    ViteFonts({
+      google: {
+        families: ['Inter']
+      }
+    })
+  ]
 }
 
 export default config
