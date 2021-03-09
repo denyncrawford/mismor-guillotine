@@ -24,6 +24,7 @@
       "dist/main/**",
       "dist/render/**"
     ],
+    "asar": false,
     "mac": {
       "artifactName": "${productName}_setup_${version}.${ext}",
       "target": [
