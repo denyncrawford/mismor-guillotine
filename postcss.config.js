@@ -23,9 +23,6 @@ module.exports = {
     autoprefixer,
     ...process.env.NODE_ENV === 'production'
     ? []
-    : [],
-    fontMagician({
-      hosted: ['./src/render/assets/fonts']
-    })
+    : []
   ],
 };

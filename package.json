@@ -2,7 +2,7 @@
   "name": "guillotine",
   "version": "0.0.1",
   "main": "dist/main/build.js",
-  "author": "",
+  "author": "denyncrawford",
   "license": "MIT",
   "scripts": {
     "dev": "npm run dev:all",
@@ -11,18 +11,19 @@
     "dev:ele": "node script/build --env=development --watch",
     "build:vue": "vite build",
     "build:ele": "node script/build --env=production",
-    "build": "npm run build:vue && npm run build:ele && electron-builder",
-    "rebuild": "node_modules/.bin/electron-rebuild.cmd"
+    "build": "npm run build:vue && npm run build:ele && electron-builder"
   },
   "build": {
-    "appId": "xxx@gmail.com",
+    "appId": "crawford.gullotine.com",
     "electronDownload": {
       "mirror": "https://npm.taobao.org/mirrors/electron/"
     },
     "files": [
-      "node_modules",
-      "dist/**"
+      "node_modules/**",
+      "dist/render/**",
+      "dist/main/**"
     ],
+    "asar": false,
     "mac": {
       "artifactName": "${productName}_setup_${version}.${ext}",
       "target": [
@@ -63,12 +64,9 @@
     "jspdf": "^2.2.0",
     "mongodb": "^3.6.3",
     "native-barcode-scanner": "^1.2.0",
-    "node-hid": "^2.0.0-0",
     "pdf-to-printer": "^1.6.0-sumatra-pdf-v3.0",
     "qrcode": "^1.4.4",
-    "sharp": "^0.26.3",
     "shortid": "^2.2.16",
-    "simple-barcode-scanner": "git+https://github.com/denyncrawford/simple-barcode-scanner.git#device-instance",
     "tailwindcss": "compat",
     "v-calendar": "^3.0.0-alpha.3",
     "vue": "^3.0.7",

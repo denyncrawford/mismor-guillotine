@@ -67,6 +67,9 @@ export default {
       this.loginWithScann(id)
     })
   },
+  beforeUnmount() {
+    scanner.off()
+  },
   components: {
     Page,
   }

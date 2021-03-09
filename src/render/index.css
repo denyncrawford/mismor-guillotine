@@ -5,62 +5,62 @@
   font-style: normal;
   font-weight: 100;
   src: 
-       url('../render/assets/fonts/Inter-thin.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+       url('/@/assets/fonts/Inter-thin.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 @font-face {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 200;
   src: 
-       url('../render/assets/fonts/Inter-ExtraLight.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+       url('/@/assets/fonts/Inter-ExtraLight.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 @font-face {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 300;
   src: 
-       url('../render/assets/fonts/Inter-Light.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+       url('/@/assets/fonts/Inter-Light.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 @font-face {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
-  src: url('../render/assets/fonts/Inter-Regular.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+  src: url('/@/assets/fonts/Inter-Regular.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 @font-face {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 500;
   src: 
-       url('../render/assets/fonts/Inter-Medium.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+       url('/@/assets/fonts/Inter-Medium.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 @font-face {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 600;
   src: 
-       url('../render/assets/fonts/Inter-SemiBold.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+       url('/@/assets/fonts/Inter-SemiBold.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 @font-face {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
   src: 
-       url('../render/assets/fonts/Inter-Bold.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+       url('/@/assets/fonts/Inter-Bold.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 @font-face {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   src: 
-       url('../render/assets/fonts/Inter-ExtraBold.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+       url('/@/assets/fonts/Inter-ExtraBold.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 @font-face {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   src: 
-       url('../render/assets/fonts/Inter-Black.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+       url('/@/assets/fonts/Inter-Black.ttf') format('truetype'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
 * {
