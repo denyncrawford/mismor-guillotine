@@ -15,7 +15,7 @@
     "build": "npm run build:vue && npm run build:ele && electron-builder"
   },
   "build": {
-    "appId": "xxx@gmail.com",
+    "appId": "com.crawford.guillotine",
     "electronDownload": {
       "mirror": "https://npm.taobao.org/mirrors/electron/"
     },
