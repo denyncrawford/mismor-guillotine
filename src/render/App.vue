@@ -7,7 +7,6 @@
 </template>
 <script>
 import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
 import { persistentSotrage as state } from './store';
 export default {
   name: 'app',
@@ -49,14 +48,12 @@ export default {
   }
 }
 </script>
-
 <style>
   .slide-enter-active {
    animation: fadeInRight;
    animation-delay: .2s;
    animation-duration: .2s;
   }
-
   .slide-leave-active {
     animation: fadeOutLeft;
     animation-duration: .2s;

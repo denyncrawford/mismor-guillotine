@@ -64,14 +64,14 @@
     "jspdf": "^2.2.0",
     "mongodb": "^3.6.3",
     "native-barcode-scanner": "^1.2.0",
-    "pdf-to-printer": "^1.6.0-sumatra-pdf-v3.0",
+    "pdf-to-printer": "1.6.0-sumatra-pdf-v3.0",
     "qrcode": "^1.4.4",
     "shortid": "^2.2.16",
     "tailwindcss": "compat",
     "v-calendar": "^3.0.0-alpha.3",
     "vue": "^3.0.7",
-    "vue-router": "^4.0.0-rc.6",
-    "vuex": "^4.0.0-rc.2"
+    "vue-router": "^4.0.4",
+    "vuex": "^4.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^3.1.1",
