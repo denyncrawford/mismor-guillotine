@@ -9,7 +9,7 @@ const ora = require('ora');
 const waitOn = require('wait-on');
 const electron = require('electron-connect').server.create({ stopOnClose: true });
 require('dotenv').config({ path: path.join(__dirname, '../.env') })
-const options = require('./rollup.config');
+const options = require('./rollup.config.js');
 
 const opt = options(argv.env);
 const TAG = '[script/build.js]';
