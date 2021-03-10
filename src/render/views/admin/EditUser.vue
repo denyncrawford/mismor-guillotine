@@ -61,6 +61,7 @@ import { formatUser, updateObject } from "../../scripts/helpers.js"
 const { dialog, app } = require('electron').remote;
 import { replace } from 'feather-icons'
 import { connect } from '../../store/index.js'
+const { resolve } = require('path')
 export default {
   data() {
     return {
@@ -105,7 +106,7 @@ export default {
         ]
       });
       this.currentData.file = file.filePaths[0];
-      this.$refs.file.style.backgroundImage = `url(${new URL(`file:///${this.currentData.file}`).href})`;
+      this.$refs.file.style.backgroundImage = `safe-file://${this.currentData.file}`;
     },
     async save() {
       const appPath = app.getPath('userData');

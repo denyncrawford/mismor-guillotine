@@ -2,29 +2,15 @@
  * electron 主文件
  */
 import { join } from 'path'
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, protocol } from 'electron'
 import is_dev from 'electron-is-dev'
 import dotenv from 'dotenv'
-import Store from 'electron-store'
-
-const store = new Store()
-ipcMain.on('store:set', async (e, args) => {
-  store.set(args.key, args.value)
-})
-ipcMain.handle('store:get', async (e, args) => {
-  const value = await store.get(args)
-  return value
-})
-ipcMain.on('store:delete', async (e, args) => {
-  store.delete(args)
-})
 
 dotenv.config({ path: join(__dirname, '../../.env') })
 
 let win = null
 
 class createWin {
-  // 创建浏览器窗口
   constructor () {
     win = new BrowserWindow({
       width: 1100,
@@ -45,7 +31,13 @@ class createWin {
   }
 }
 
-app.whenReady().then(() => new createWin())
+app.whenReady().then(() => {
+  protocol.registerFileProtocol('file', (request, callback) => {
+    const pathname = decodeURI(request.url.replace('file:///', ''));
+    callback(pathname);
+  });
+  new createWin();
+})
 
 
 app.on('window-all-closed', () => {

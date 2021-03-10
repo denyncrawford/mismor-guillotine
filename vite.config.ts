@@ -13,13 +13,14 @@ const config: UserConfig = {
   root,
   resolve: {
     alias: {
-      '/@': root,
+      '/@/': root,
     }
   },
   base: './',
   build: {
     outDir: join('../../dist/render'),
-    emptyOutDir: true
+    emptyOutDir: true,
+    assetsInlineLimit: 0
   },
   server: {
     port: +process.env.PORT,
