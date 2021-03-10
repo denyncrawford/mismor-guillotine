@@ -39,7 +39,7 @@ const resource = `http://localhost:${process.env.PORT}/index.html`; // 因为 vi
 if (argv.watch) {
   waitOn({
     resources: [resource],
-    timeout: 5000,
+    timeout: 20000,
   }, err => {
     if (err) {
         const { port, hostname } = new URL(resource);
