@@ -56,7 +56,7 @@
 import Page from '../../components/structure/Page.vue'
 const { copy } = require('fs-extra');
 const { join } = require('path');
-import shortid from 'shortid'
+const { nanoid } = require('nanoid')
 import { formatUser, updateObject } from "../../scripts/helpers.js"
 const { dialog, app } = require('electron').remote;
 import { replace } from 'feather-icons'
@@ -106,13 +106,13 @@ export default {
         ]
       });
       this.currentData.file = file.filePaths[0];
-      this.$refs.file.style.backgroundImage = `safe-file://${this.currentData.file}`;
+      this.$refs.file.style.backgroundImage = `url(${new URL(`file:///${this.currentData.file}`).href})`;
     },
     async save() {
       const appPath = app.getPath('userData');
       let sign = this.currentData;
       const extension = sign.file.split(".").slice(-1)[0];
-      let newFileName = shortid.generate() + "." + extension
+      let newFileName = nanoid(10) + "." + extension
       let newFile = join(appPath,"/pictures", newFileName);
       for (let k in sign) {
         if (k == "password" || k == "username" || k == "date" || k == "admin" || k == "_id") {

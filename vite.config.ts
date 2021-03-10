@@ -32,6 +32,19 @@ const config: UserConfig = {
     exclude: [
       'electron-is-dev',
       'electron-store',
+      'mongodb',
+      'fs-extra',
+      'jspdf',
+      'native-barcode-scanner',
+      'pdf-to-printer',
+      'fs',
+      'json2csv'
+    ],
+    include: [
+      'element-plus/lib/locale/lang/es',
+      'dayjs/plugin/duration.js',
+      'dayjs/plugin/customParseFormat.js',
+      'nanoid'
     ]
   },
 }

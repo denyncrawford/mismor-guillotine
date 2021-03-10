@@ -56,7 +56,7 @@
 import Page from '../../components/structure/Page.vue'
 const { copy } = require('fs-extra');
 const { join } = require('path');
-import shortid from 'shortid'
+const { nanoid } = require('nanoid')
 import { formatUser } from "../../scripts/helpers.js"
 const { dialog, app } = require('electron').remote;
 import { replace } from 'feather-icons'
@@ -104,7 +104,7 @@ export default {
       const users = db.collection('users');
       let sign = this.$data;
       const extension = sign.file.split(".").slice(-1)[0];
-      let newFileName = shortid.generate() + "." + extension
+      let newFileName = nanoid(10) + "." + extension
       let newFile = join(appPath,"/pictures", newFileName);
       for (let k in sign) {
         if (k == "password" || k == "username" || k == "date" || k == "admin" || k == 'innings') {

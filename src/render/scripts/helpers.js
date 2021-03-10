@@ -1,4 +1,5 @@
-import shortid from 'shortid'
+import { customAlphabet } from 'nanoid'
+const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRETUVWXYZ', 10)
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration.js'
 import customParseFormat from 'dayjs/plugin/customParseFormat.js'
@@ -8,7 +9,7 @@ dayjs.extend(customParseFormat)
 
 const formatUser = (data) => {
   if (data.name && data.lastName) data.fullName = data.name + " " + data.lastName
-  data.id = shortid.generate();
+  data.id = nanoid();
   return data
 }
 
@@ -26,7 +27,7 @@ const handleInning = (owner, inning) => {
     totalTime: 0,
     state: true,
     details: '',
-    id: shortid.generate()
+    id: nanoid()
   }
   inning.end = dayjs().format('hh:mm:ss A');
   const date1 = dayjs(inning.start, 'hh:mm:ss A')
