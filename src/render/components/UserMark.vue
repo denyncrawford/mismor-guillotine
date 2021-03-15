@@ -27,7 +27,7 @@
             </div>
             <div :class="[!type ? 'bg-red-600': 'bg-main-color']" class="mt-5 py-1 px-2 rounded uppercase">
               <h1 v-show="!deny" class="font-bold">{{ type ? 'Entrada' : 'Salida' }}: {{ time }}</h1>
-              <h1 v-show="deny" class="font-bold">No puede iniciar otro turno hoy.</h1>
+              <h1 v-show="deny" class="font-bold">No puede iniciar otro turno hoy</h1>
             </div>
             <div v-show="!deny" :class="[!type ? 'bg-red-600': 'bg-main-color']" class="rounded-full mt-5 p-2">
               <i class="text-white stroke-current" data-feather="check"></i>

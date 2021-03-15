@@ -120,6 +120,7 @@
                 <th class="py-2 text-xs px-5">Fecha</th>
                 <th class="py-2 text-xs px-5">Entrada</th>
                 <th class="py-2 text-xs px-5">Salida</th>
+                <th class="py-2 text-xs px-5">Duración</th>
                 <th class="py-2 text-xs px-5">Estatus</th>
                 <th class="py-2 text-xs px-5">Ver</th>
               </tr>
@@ -131,6 +132,7 @@
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.dateString}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.start}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.end || '-'}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.totalTime || '-'}} horas</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.state ? "Abierto" : "Cerrado" }}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">
                   <div class="flex">
@@ -251,20 +253,22 @@ export default {
         { $eq: [ "$$innings.date.month", dayjs(date, 'DD/MM/YYYY').format('MM') ] },
         { $eq: [ "$$innings.date.year", dayjs(date, 'DD/MM/YYYY').format('YYYY') ] }
       ] }
-      return await this.users.collection.aggregate([
-        { $match: { 'innings.dateString': date }},
-        { $project: {
-            innings: { $filter: {
-                input: '$innings',
-                as: 'innings',
-                cond
-            }},
-            _id: 0
-        }}
-      ]).toArray();
+      return await this.users.collection.find({innings: { $gte : {  $size : 1 } }}).project(
+        {
+        innings: { 
+          $filter: {
+            input: '$innings',
+            as: 'innings',
+            cond
+            }
+          },
+          _id: 0
+        }
+      ).toArray();
     },
     async onDayClick(day) {
       const result = await this.searchInnings(dayjs(this.innings.date).format('DD/MM/YYYY'));
+      console.log(result)
       this.innings.entries = result.map(e => e.innings.map(l => l)).flat().sort((a,b) => dayjs(b.dateString, 'DD/MM/YYYY').toDate().valueOf() - dayjs(a.dateString, 'DD/MM/YYYY').toDate().valueOf())
     },
     async saveCSV({month}) {

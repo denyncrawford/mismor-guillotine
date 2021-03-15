@@ -72,6 +72,7 @@
                 <th class="py-2 text-xs px-5">Fecha</th>
                 <th class="py-2 text-xs px-5">Entrada</th>
                 <th class="py-2 text-xs px-5">Salida</th>
+                <th class="py-2 text-xs px-5">Duración</th>
                 <th class="py-2 text-xs px-5">Estatus</th>
                 <th class="py-2 text-xs px-5">Ver</th>
               </tr>
@@ -83,6 +84,7 @@
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.dateString}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.start}}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.end || '-'}}</th>
+                <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.totalTime || '-'}} horas</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">{{inning.state ? "Abierto" : "Cerrado" }}</th>
                 <th class="py-2 group-hover:text-back text-xs font-normal px-5">
                   <div class="flex">
