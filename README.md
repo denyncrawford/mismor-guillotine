@@ -1,5 +1,5 @@
 # mismor-guillotine
-👻 A employee control software.
+👻 An employee control software.
 
 ⚡️ This is a `Vite 2 + Vue 3 + Electron 11.x` project:
 
